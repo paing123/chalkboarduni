@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Course List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmCourse" th:object="${model}" th:action="@{searchcourses}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Courses</h2>
+		<table>
+			<tr>
+				<td>CourseId</td>
+				<td><input type="text" th:field="*{courseId}"></td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td>Course Type</td>
+				<td><input type="text" th:field="*{courseType}"></td>
+			</tr>
+			<tr>
+				<td>Credit</td>
+				<td><input type="text" th:field="*{credit}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Course List</h2>
+		<a th:href="@{registercourse}">Add Course</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.courseList)}">
+		<table>
+			<tr>
+				<th>Course Id</th>
+				<th>Department Name</th>
+				<th>Course Name</th>
+				<th>Course Type</th>
+				<th>Credit</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="course : ${model.courseList}">
+				<td th:utext="${course.courseId}"></td>
+				<td th:utext="${course.departmentName}"></td>
+				<td th:utext="${course.courseName}"></td>
+				<td th:utext="${course.courseType}"></td>
+				<td th:utext="${course.credit}"></td>
+				<td>
+					<a th:href="@{updatecourse/{id}(id=${course.courseId})}">Update</a>
+					<a th:href="@{deletecourse/{id}(id=${course.courseId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

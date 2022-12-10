@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>MajorRequirement Detail List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	function findMajorRequirement(majorId,majorName){
+		document.getElementById("majorId").value = majorId;
+		document.getElementById("majorName").value = majorName;
+		document.forms.frmMajorRequirementList.action = "majorrequirementdetail";
+		document.forms.frmMajorRequirementList.submit();
+	}
+	
+	function deleteMajorRequirement(majorId,majorName,courseId){
+		document.getElementById("majorId").value = majorId;
+		document.getElementById("majorName").value = majorName;
+		document.getElementById("courseId").value = courseId;
+		document.forms.frmMajorRequirementList.action = "deletemajorrequirement";
+		document.forms.frmMajorRequirementList.submit();
+	}
+	
+	function backToMajors(){
+		document.getElementById("majorId").value = "";
+		document.getElementById("majorName").value = "";
+		document.getElementById("courseId").value = courseId;
+		document.forms.frmMajorRequirementList.action = "searchmajors";
+		document.forms.frmMajorRequirementList.submit();
+	}
+	
+</script>
+</head>
+<body>
+<form id="frmMajorRequirementList" th:object="${model}" th:action="@{/admin/registermajorrequirement}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Register Major Requirement</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>Major Name</td>
+				<td>
+					<input type="hidden" th:field="*{majorId}" id="majorId"/>
+					<input type="hidden" th:field="*{majorName}" id="majorName"/>
+					<label th:text="${model.majorName}"></label>
+					<div th:if="${#fields.hasErrors('majorId')}"  th:errors="*{majorId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td>
+					<select th:field="*{courseId}" id="courseId" style="width: 100%">
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('courseId')}"  th:errors="*{courseId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="button" th:onclick="backToMajors()">Back</button><button type="submit">Add</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Major Requirement List</h2>
+		<table>
+			<tr>
+				<th>Major Name</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="majorrequirement : ${model.majorRequirementList}">
+				<td th:utext="${majorrequirement.majorName}"></td>
+				<td th:utext="${majorrequirement.courseId}"></td>
+				<td th:utext="${majorrequirement.courseName}"></td>
+				<td>
+					<button type="button" th:onclick="deleteMajorRequirement([[${majorrequirement.majorId}]],[[${majorrequirement.majorName}]],[[${majorrequirement.courseId}]])">Delete</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

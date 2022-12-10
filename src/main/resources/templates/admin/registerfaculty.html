@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Faculty</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<form th:action="@{/admin/registerfaculty}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Faculty</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>Faculty</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:each="facultyUser : ${model.facultyUserList}" th:value="${facultyUser.userId}" th:text="${facultyUser.userId+' : '+facultyUser.firstName+ ' ' +facultyUser.lastName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('facultyId')}"  th:errors="*{facultyId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty Type</td>
+				<td><input type="text" th:field="*{facultyType}" maxlength="20">
+					<div th:if="${#fields.hasErrors('facultyType')}"  th:errors="*{facultyType}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Rank</td>
+				<td><input type="text" th:field="*{rank}" maxlength="20">
+					<div th:if="${#fields.hasErrors('rank')}"  th:errors="*{rank}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Office</td>
+				<td>
+					<select th:field="*{officeId}" style="width: 100%">
+						<option th:each="room : ${model.roomList}" th:value="${room.roomId}" th:text="${room.roomType}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('officeId')}"  th:errors="*{officeId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Office Hours</td>
+				<td><input type="text" th:field="*{officeHours}" maxlength="300">
+					<div th:if="${#fields.hasErrors('officeHours')}"  th:errors="*{officeHours}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Room List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmRoom" th:object="${model}" th:action="@{/admin/searchrooms}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div th:if="${model.successMessage == 'registered'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+	</div>
+	<div th:if="${model.successMessage == 'updated'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+	</div>
+	<div th:if="${model.successMessage == 'deleted'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+	</div>
+	<div align="center">
+		<h2>Search Rooms</h2>
+		<table>
+			<tr>
+				<td>Room Id</td>
+				<td><input type="text" th:field="*{roomId}"></td>
+			</tr>
+			<tr>
+				<td>Room Capacity</td>
+				<td><input type="text" th:field="*{roomCapacity}"></td>
+			</tr>
+			<tr>
+				<td>Building Name</td>
+				<td>
+					<select th:field="*{buildingId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="building : ${model.buildingList}" th:value="${building.buildingId}" th:text="${building.buildingName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Room Type</td>
+				<td><input type="text" th:field="*{roomType}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Room List</h2>
+		<a th:href="@{registerroom}">Add Room</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.roomList)}">
+		<table>
+			<tr>
+				<th>Room Id</th>
+				<th>Room Capacity</th>
+				<th>Building Name</th>
+				<th>Room Type</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="room : ${model.roomList}">
+				<td th:utext="${room.roomId}"></td>
+				<td th:utext="${room.roomCapacity}"></td>
+				<td th:utext="${room.buildingName}"></td>
+				<td th:utext="${room.roomType}"></td>
+				<td>
+					<a th:href="@{/admin/updateroom/{id}(id=${room.roomId})}">Update</a>
+					<a th:href="@{/admin/deleteroom/{id}(id=${room.roomId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

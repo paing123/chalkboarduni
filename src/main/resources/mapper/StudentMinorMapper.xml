@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.StudentMinorMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.StudentMinor">
+		<result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  	<result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  	<result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		studentminor
+		VALUES
+		(#{studentMinor.studentId},#{studentMinor.minorId},#{studentMinor.date})
+	</insert>
+
+	<update id="update">
+		UPDATE studentminor SET
+		Date=#{studentMinor.date}, MinorID=#{studentMinor.minorId}
+		WHERE StuID=#{studentMinor.studentId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM studentminor WHERE StuID=#{studentMinor.studentId} AND MinorID=#{studentMinor.minorId}
+	</delete>
+
+	<select id="findStudentMinor" resultType="edu.chalkboarduni.uniregistrationsystem.model.StudentMinor" resultMap="BaseResultMap">
+		SELECT sm.StuID, s.StudentType, u.FName, u.LName, sm.MinorID, m.MinorName, sm.date
+		FROM student s, minor m, user u, studentminor sm
+		<where>
+			sm.StuID = s.StuID AND sm.MinorID = m.MinorID AND s.StuID = u.UID
+			
+			<if test="studentMinor.studentId!=null">
+				AND sm.StuID = #{studentMinor.studentId}
+			</if>
+			<if test="studentMinor.studentType!=null">
+				AND s.StudentType LIKE '%' #{studentMinor.studentType} '%'
+			</if>
+			<if test="studentMinor.studentFirstName!=null">
+				AND u.FName LIKE '%' #{studentMinor.studentFirstName} '%'
+			</if>
+			<if test="studentMinor.studentLastName!=null">
+				AND u.LName LIKE '%' #{studentMinor.studentLastName} '%'
+			</if>
+			<if test="studentMinor.minorId!=null">
+				AND sm.MinorID = #{studentMinor.minorId}
+			</if>
+			<if test="studentMinor.minorName!=null">
+				AND m.MinorName LIKE '%' #{studentMinor.minorName} '%' 
+			</if>
+			<if test="studentMinor.date!=null">
+				AND sm.Date = CAST(#{studentMinor.date} AS DATE)
+			</if>
+			ORDER BY sm.StuID
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Faculty History List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmFacultyHistory" th:object="${model}" th:action="@{/admin/searchfacultyhistories}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Faculty History</h2>
+		<table>
+			<tr>
+				<td>Faculty Id</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="faculty : ${model.facultyList}" th:value="${faculty.facultyId}" th:text="${faculty.facultyId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty First Name</td>
+				<td><input type="text" th:field="*{facultyFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Faculty Last Name</td>
+				<td><input type="text" th:field="*{facultyLastName}"></td>
+			</tr>
+			<tr>
+				<td>Faculty Type</td>
+				<td><input type="text" th:field="*{facultyType}"></td>
+			</tr>
+			<tr>
+				<td>Rank</td>
+				<td><input type="text" th:field="*{rank}"></td>
+			</tr>
+			<tr>
+				<td>Course Section Id</td>
+				<td>
+					<select th:field="*{courseSectionId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="courseSection : ${model.courseSectionList}" th:value="${courseSection.courseSectionId}" th:text="${courseSection.courseSectionId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Semester Year</td>
+				<td><input type="text" th:field="*{semesterYear}"></td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Faculty History List</h2>
+		<a th:href="@{registerfacultyhistory}">Add Faculty History</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.facultyHistoryList)}">
+		<table>
+			<tr>
+				<th>Faculty Id</th>
+				<th>Faculty First Name</th>
+				<th>Faculty Last Name</th>
+				<th>Faculty Type</th>
+				<th>Rank</th>
+				<th>Course Section Id</th>
+				<th>Semester Year</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="facultyHistory : ${model.facultyHistoryList}">
+				<td th:utext="${facultyHistory.facultyId}"></td>
+				<td th:utext="${facultyHistory.facultyFirstName}"></td>
+				<td th:utext="${facultyHistory.facultyLastName}"></td>
+				<td th:utext="${facultyHistory.facultyType}"></td>
+				<td th:utext="${facultyHistory.rank}"></td>
+				<td th:utext="${facultyHistory.courseSectionId}"></td>
+				<td th:utext="${facultyHistory.semesterYear}"></td>
+				<td th:utext="${facultyHistory.courseId}"></td>
+				<td th:utext="${facultyHistory.courseName}"></td>
+				<td>
+					<a th:href="@{/admin/deletefacultyhistory/{facId}/{courseSectionId}(facId=${facultyHistory.facultyId},courseSectionId=${facultyHistory.courseSectionId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

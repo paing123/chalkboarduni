@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Course Section List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+	
+	input {
+		width: 96%;
+	}
+	
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmCourseSection" th:object="${model}" th:action="@{/admin/searchcoursesections}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Course Section</h2>
+		<table>
+			<tr>
+				<td>CRN</td>
+				<td><input type="text" th:field="*{courseSectionId}"></td>
+			</tr>
+			<tr>
+				<td>Section Number</td>
+				<td><input type="text" th:field="*{sectionNumber}"></td>
+			</tr>
+			<tr>
+				<td>Credit</td>
+				<td><input type="text" th:field="*{credit}"></td>
+			</tr>
+			<tr>
+				<td>Semester Year</td>
+				<td><input type="text" th:field="*{semesterYear}"></td>
+			</tr>
+			<tr>
+				<td>Time Window</td>
+				<td><input type="datetime-local" th:field="*{timeWindow}" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td>Faculty Id</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="faculty : ${model.facultyList}" th:value="${faculty.facultyId}" th:text="${faculty.facultyId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty First Name</td>
+				<td><input type="text" th:field="*{facultyFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Faculty Last Name</td>
+				<td><input type="text" th:field="*{facultyLastName}"></td>
+			</tr>
+			<tr>
+				<td>Day</td>
+				<td><input type="text" th:field="*{day}"></td>
+			</tr>
+			<tr>
+				<td>Period</td>
+				<td><input type="text" th:field="*{period}"></td>
+			</tr>
+			<tr>
+				<td>Room Id</td>
+				<td>
+					<select th:field="*{roomId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="room : ${model.roomList}" th:value="${room.roomId}" th:text="${room.roomId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td>Department Id</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td><input type="text" th:field="*{departmentName}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Course Section List</h2>
+		<a th:href="@{registercoursesection}">Add Course Section</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.courseSectionList)}">
+		<table>
+			<tr>
+				<th>CRN</th>
+				<th>Department Id</th>
+				<th>Department Name</th>
+				<th>Course Id</th>
+				<th>Section Number</th>
+				<th>Credit</th>
+				<th>Course Name</th>
+				<th>Day</th>
+				<th>Period</th>
+				<th>Available Seats</th>
+				<th>Remaining Seats</th>
+				<th>Semester Year</th>
+				<th>Time Window</th>
+				<th>Faculty Id</th>
+				<th>Faculty First Name</th>
+				<th>Faculty Last Name</th>
+				<th>Room Id</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="courseSection : ${model.courseSectionList}">
+				<td th:utext="${courseSection.courseSectionId}"></td>
+				<td th:utext="${courseSection.departmentId}"></td>
+				<td th:utext="${courseSection.departmentName}"></td>
+				<td th:utext="${courseSection.courseId}"></td>
+				<td th:utext="${courseSection.sectionNumber}"></td>
+				<td th:utext="${courseSection.credit}"></td>
+				<td th:utext="${courseSection.courseName}"></td>
+				<td th:utext="${courseSection.day}"></td>
+				<td th:utext="${courseSection.period}"></td>
+				<td th:utext="${courseSection.availableSeats}"></td>
+				<td th:utext="${courseSection.remainingSeats}"></td>
+				<td th:utext="${courseSection.semesterYear}"></td>
+				<td th:utext="${courseSection.timeWindow}"></td>
+				<td th:utext="${courseSection.facultyId}"></td>
+				<td th:utext="${courseSection.facultyFirstName}"></td>
+				<td th:utext="${courseSection.facultyLastName}"></td>
+				<td th:utext="${courseSection.roomId}"></td>
+				<td>
+					<a th:href="@{/admin/updatecoursesection/{id}(id=${courseSection.courseSectionId})}">Update</a>
+					<a th:href="@{/admin/deletecoursesection/{id}(id=${courseSection.courseSectionId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

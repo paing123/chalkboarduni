@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.DepartmentMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Department">
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		department(DID,DepartmentName,Email,PhoneNum,BuildingRoom,DepartmentChair,DepartmentSecretary)
+		VALUES
+		(#{department.departmentId},#{department.departmentName},#{department.email},#{department.phoneNum},
+		#{department.buildingRoom},#{department.departmentChair},#{department.departmentSecretary})
+	</insert>
+
+	<update id="update">
+		UPDATE department SET
+		departmentName=#{department.departmentName},Email=#{department.email},PhoneNum=#{department.phoneNum},
+		BuildingRoom=#{department.buildingRoom},DepartmentChair=#{department.departmentChair},DepartmentSecretary=#{department.departmentSecretary}
+		WHERE DID=#{department.departmentId}
+	</update>
+
+	<delete id="delete">
+		UPDATE department SET DelFLg = 1 WHERE DID=#{id} 
+	</delete>
+
+	<select id="findDepartment" resultType="edu.chalkboarduni.uniregistrationsystem.model.Department" resultMap="BaseResultMap">
+		SELECT * FROM department
+		<where>
+			<if test="department.departmentId!=null">
+				AND DID = #{department.departmentId}
+			</if>
+			<if test="department.departmentName!=null">
+				AND DepartmentName LIKE '%' #{department.departmentName} '%'
+			</if>
+			<if test="department.email!=null">
+				AND Email LIKE '%' #{department.email} '%'
+			</if>
+			<if test="department.phoneNum!=null">
+				AND PhoneNum LIKE '%' #{department.phoneNum} '%'
+			</if>
+			<if test="department.buildingRoom!=null">
+				AND BuildingRoom LIKE '%' #{department.buildingRoom} '%'
+			</if>
+			<if test="department.departmentChair!=null">
+				AND DepartmentChair LIKE '%' #{department.departmentChair} '%'
+			</if>
+			<if test="department.departmentSecretary!=null">
+				AND DepartmentSecretary LIKE '%' #{department.departmentSecretary} '%'
+			</if>
+			AND DelFlg = 0
+		</where>
+	</select>
+</mapper>

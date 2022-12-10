@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+</head>
+<body>
+	<div th:fragment="header">
+	    <div class="py-2 bg-light">
+	      <div class="container">
+	        <div class="row align-items-center">
+	          <div class="col-lg-9 d-none d-lg-block">
+	            <a href="#" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> Have questions?</a> 
+	            <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span>+1 516 876 2022</a> 
+	            <a href="#" class="small mr-3"><span class="icon-envelope-o mr-2"></span> chalkboard@cu.edu</a> 
+	          </div>
+	          <div class="col-lg-3 text-right">
+	            <a th:href="@{/login}" class="small mr-3"><span class="icon-unlock-alt"></span> Log In</a>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+	      	<div class="container">
+				<div class="d-flex align-items-center">
+		          <div class="site-logo">
+		            <a th:href="@{/admin/adminhome}" class="d-block">
+		              <img src="../../images/logo.jpg" alt="Image" class="img-fluid">
+		            </a>
+		          </div>
+		          <div class="mr-auto">
+		            <nav class="site-navigation position-relative text-right" role="navigation">
+		              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+		                <li class="active">
+		                  <a th:href="@{/admin/adminhome}" class="nav-link text-left">Home</a>
+		                </li>
+		                <li class="has-children">
+		                  <a th:href="@{/admin/students}" class="nav-link text-left">Students</a>
+		                  <ul class="dropdown">
+		                    <li><a th:href="@{/admin/studenthistories}">Student History</a></li>
+		                    <li><a th:href="@{/admin/studentholds}">Student Hold</a></li>
+		                    <li><a th:href="@{/admin/studentmajors}">Student Major</a></li>
+		                    <li><a th:href="@{/admin/studentminors}">Student Minor</a></li>
+		                    <li><a th:href="@{/admin/attendances}">Attendances</a></li>
+		                    <li><a th:href="@{/admin/enrollments}">Enrollments</a></li>
+		                    <li><a th:href="@{/admin/advisings}">Appointments</a></li>
+		                  </ul>
+		                </li>
+		                <li class="has-children">
+		                  <a th:href="@{/admin/faculties}" class="nav-link text-left">Faculty</a>
+		                  <ul class="dropdown">
+		                    <li><a th:href="@{/admin/facultydepartments}">Faculty departments</a></li>
+		                    <li><a th:href="@{/admin/facultyhistories}">Faculty Histories</a></li>
+		                  </ul>
+		                </li>
+		                <li class="has-children">
+		                  <a th:href="@{/admin/courses}" class="nav-link text-left">Courses</a>
+		                  <ul class="dropdown">
+		                    <li><a th:href="@{/admin/coursesections}">Course Sections</a></li>
+		                    <li><a th:href="@{/admin/majors}">Majors</a></li>
+		                    <li><a th:href="@{/admin/minors}">Minors</a></li>
+		                    <li><a th:href="@{/admin/prerequisitess}">Prerequisites</a></li>
+		                    <li><a th:href="@{/admin/timeslots}">Time Slot</a></li>
+		                  </ul>
+		                </li>
+		               <li class="has-children">
+		                  <a th:href="@{/admin/departments}" class="nav-link text-left">Departments</a>
+		                  <ul class="dropdown">
+		                    <li><a th:href="@{/admin/buildings}">Buildings</a></li>
+		                    <li><a th:href="@{/admin/rooms}">Rooms</a></li>
+		                  </ul>
+		                </li>               
+						<li class="active">
+		                  <a th:href="@{/admin/holds}" class="nav-link text-left">Holds</a>
+		                </li>
+		                <li class="active">
+		                  <a th:href="@{/admin/users}" class="nav-link text-left">Users</a>
+		                </li>
+		              </ul>                                                                                                                                                                                                                                                                                          </ul>
+		            </nav>
+		          </div>         
+		        </div>
+	        </div>
+        </header>
+	</div>
+</body>
+</html>

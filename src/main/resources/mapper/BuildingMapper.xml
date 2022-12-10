@@ -1,0 +1,45 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.BuildingMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Building">
+	  <result column="BldgID" jdbcType="VARCHAR" property="buildingId" />
+	  <result column="BldgName" jdbcType="VARCHAR" property="buildingName" />
+	  <result column="BldgLocation" jdbcType="VARCHAR" property="buildingLocation" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		building
+		VALUES
+		(#{building.buildingId},#{building.buildingName},#{building.buildingLocation},0)
+	</insert>
+
+	<update id="update">
+		UPDATE building SET
+		BldgName=#{building.buildingName},BldgLocation=#{building.buildingLocation}
+		WHERE BldgID=#{building.buildingId}
+	</update>
+
+	<delete id="delete">
+		UPDATE building SET DelFlg = 1 WHERE BldgID=#{id} 
+	</delete>
+
+	<select id="findBuilding" resultType="edu.chalkboarduni.uniregistrationsystem.model.Building" resultMap="BaseResultMap">
+		SELECT * FROM building 
+		<where>
+			<if test="building.buildingId!=null">
+				AND BldgID = #{building.buildingId}
+			</if>
+			<if test="building.buildingName!=null">
+				AND BldgName LIKE '%' #{building.buildingName} '%'
+			</if>
+			<if test="building.buildingLocation!=null">
+				AND BldgLocation LIKE '%' #{building.buildingLocation} '%'
+			</if>
+			AND DelFlg = 0
+		</where>
+	</select>
+</mapper>

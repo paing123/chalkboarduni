@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Major List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+	function findMajorRequirement(majorId, majorName){
+		document.getElementById("majorId").value = majorId;
+		document.getElementById("majorName").value = majorName;
+		document.forms.frmMajor.action = "majorrequirementdetail";
+		document.forms.frmMajor.submit();
+	}
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmMajor" th:object="${model}"  method="post" th:action="@{searchmajors}">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Majors</h2>
+		<table>
+			<tr>
+				<td>Major Id</td>
+				<td><input type="text" th:field="*{majorId}" id="majorId"></td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Major Name</td>
+				<td><input type="text" th:field="*{majorName}" id="majorName"></td>
+			</tr>
+			<tr>
+				<td>Major Degree</td>
+				<td><input type="text" th:field="*{majorDegree}"></td>
+			</tr>
+			<tr>
+				<td>Credits To Graduate</td>
+				<td><input type="text" th:field="*{creditsToGraduate}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Major List</h2>
+		<a th:href="@{/admin/registermajor}">Add Major</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.majorList)}">
+		<table>
+			<tr>
+				<th>Major Id</th>
+				<th>Department Name</th>
+				<th>Major Name</th>
+				<th>Major Degree</th>
+				<th>Credits To Graduate</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="major : ${model.majorList}">
+				<td th:utext="${major.majorId}"></td>
+				<td th:utext="${major.departmentName}"></td>
+				<td th:utext="${major.majorName}"></td>
+				<td th:utext="${major.majorDegree}"></td>
+				<td th:utext="${major.creditsToGraduate}"></td>
+				<td>
+					<button type="button" th:onclick="findMajorRequirement([[${major.majorId}]],[[${major.majorName}]])">Requirement</button>
+					<a th:href="@{/admin/updatemajor/{id}(id=${major.majorId})}">Update</a>
+					<a th:href="@{/admin/deletemajor/{id}(id=${major.majorId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

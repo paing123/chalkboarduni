@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Department List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmDepartment" th:object="${model}" th:action="@{/admin/searchdepartments}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Department</h2>
+		<table>
+			<tr>
+				<td>DepartmentId</td>
+				<td><input type="text" th:field="*{departmentId}"></td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td><input type="text" th:field="*{departmentName}"></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="text" th:field="*{email}"></td>
+			</tr>
+			<tr>
+				<td>Phone</td>
+				<td><input type="text" th:field="*{phoneNum}"></td>
+			</tr>
+			<tr>
+				<td>Building Room</td>
+				<td><input type="text" th:field="*{buildingRoom}"></td>
+			</tr>
+			<tr>
+				<td>Department Chair</td>
+				<td><input type="text" th:field="*{departmentChair}"></td>
+			</tr>
+			<tr>
+				<td>Department Secretary</td>
+				<td><input type="text" th:field="*{departmentSecretary}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Department List</h2>
+		<a th:href="@{registerdepartment}">Add Department</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.departmentList)}">
+		<table>
+			<tr>
+				<th>Department Id</th>
+				<th>Department Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Building Room</th>
+				<th>Department Chair</th>
+				<th>Department Secretary</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="department : ${model.departmentList}">
+				<td th:utext="${department.departmentId}"></td>
+				<td th:utext="${department.departmentName}"></td>
+				<td th:utext="${department.email}"></td>
+				<td th:utext="${department.phoneNum}"></td>
+				<td th:utext="${department.buildingRoom}"></td>
+				<td th:utext="${department.departmentChair}"></td>
+				<td th:utext="${department.departmentSecretary}"></td>
+				<td>
+					<!-- <button type="button" th:onclick="getExistDepartment([[${department.departmentId}]])">Update</button> -->
+					<a th:href="@{/admin/updatedepartment/{id}(id=${department.departmentId})}">Update</a>
+					<a th:href="@{/admin/deletedepartment/{id}(id=${department.departmentId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

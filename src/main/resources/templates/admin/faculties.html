@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Faculty List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmFaculty" th:object="${model}" th:action="@{/admin/searchfaculties}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Faculty</h2>
+		<table>
+			<tr>
+				<td>Faculty Id</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="facultyUser : ${model.facultyUserList}" th:value="${facultyUser.userId}" th:text="${facultyUser.firstName+ ' ' +facultyUser.lastName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty Type</td>
+				<td><input type="text" th:field="*{facultyType}"></td>
+			</tr>
+			<tr>
+				<td>Rank</td>
+				<td><input type="text" th:field="*{rank}"></td>
+			</tr>
+			<tr>
+				<td>Office</td>
+				<td>
+					<select th:field="*{officeId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="room : ${model.roomList}" th:value="${room.roomId}" th:text="${room.roomType}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Office Hours</td>
+				<td><input type="text" th:field="*{officeHours}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Faculty List</h2>
+		<a th:href="@{/admin/registerfaculty}">Add Faculty</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.facultyList)}">
+		<table>
+			<tr>
+				<th>Faculty Id</th>
+				<th>Faculty Name</th>
+				<th>Faculty Type</th>
+				<th>Rank</th>
+				<th>Office Id</th>
+				<th>Office Type</th>
+				<th>Office Hours</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="faculty : ${model.facultyList}">
+				<td th:utext="${faculty.facultyId}"></td>
+				<td th:utext="${faculty.facultyFirstName +' '+faculty.facultyLastName}"></td>
+				<td th:utext="${faculty.facultyType}"></td>
+				<td th:utext="${faculty.rank}"></td>
+				<td th:utext="${faculty.officeId}"></td>
+				<td th:utext="${faculty.roomType}"></td>
+				<td th:utext="${faculty.officeHours}"></td>
+				<td>
+					<a th:href="@{/admin/updatefaculty/{id}(id=${faculty.facultyId})}">Update</a>
+					<a th:href="@{/admin/deletefaculty/{id}(id=${faculty.facultyId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.EnrollmentMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Enrollment">
+	  <result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  <result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	  <result column="CRN" jdbcType="VARCHAR" property="courseSectionId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		enrollment
+		VALUES
+		(#{enrollment.studentId},#{enrollment.courseSectionId},NOW())
+	</insert>
+
+	<update id="update">
+		UPDATE enrollment SET
+		CRN=#{enrollment.courseSectionId}, EnrollmentDate=NOW()
+		WHERE StuID=#{enrollment.studentId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM enrollment WHERE StuID=#{enrollment.studentId} AND CRN=#{enrollment.courseSectionId}
+	</delete>
+
+	<select id="findEnrollment" resultType="edu.chalkboarduni.uniregistrationsystem.model.Enrollment" resultMap="BaseResultMap">
+		SELECT e.StuID, u.FName, u.LName, e.CRN, cs.SectionNumber, cs.AvailableSeats, cs.SemesterYear, cs.TimeSlotID, cs.TimeWindow, c.CourseID, c.CourseName, e.EnrollmentDate
+		FROM enrollment e, student s, user u, coursesection cs, course c , timeslot ts
+		<where>
+			e.StuID = s.StuID AND e.CRN = cs.CRN AND s.StuID = u.UID AND cs.CourseID = c.CourseID AND ts.TimeSlotID = cs.TimeSlotID
+			<if test="enrollment.studentId!=null">
+				AND e.StuID = #{enrollment.studentId}
+			</if>
+			<if test="enrollment.studentFirstName!=null">
+				AND u.FName LIKE '%' #{enrollment.studentFirstName} '%'
+			</if>
+			<if test="enrollment.studentLastName!=null">
+				AND u.LName LIKE '%' #{enrollment.studentLastName} '%'
+			</if>
+			<if test="enrollment.courseSectionId!=null">
+				AND e.CRN = #{enrollment.courseSectionId}
+			</if>
+			<if test="enrollment.sectionNumber!=null">
+				AND cs.SectionNumber = #{enrollment.sectionNumber}
+			</if>
+			<if test="enrollment.availableSeats!=null">
+				AND cs.AvailableSeats = #{enrollment.availableSeats}
+			</if>
+			<if test="enrollment.semesterYear!=null">
+				AND cs.SemesterYear = #{enrollment.semesterYear}
+			</if>
+			<if test="enrollment.timeSlotId!=null">
+				AND cs.TimeSlotID = #{enrollment.timeSlotId}
+			</if>
+			<if test="enrollment.timeWindow!=null">
+				AND cs.TimeWindow LIKE '%' #{enrollment.timeWindow} '%'
+			</if> 
+			<if test="enrollment.courseId!=null">
+				AND c.CourseID = #{enrollment.courseId}
+			</if>
+			<if test="enrollment.courseName!=null">
+				AND c.CourseName LIKE '%' #{enrollment.courseName} '%'
+			</if>
+			<if test="enrollment.enrollmentDate!=null">
+				AND e.EnrollmentDate = #{enrollment.enrollmentDate}
+			</if>
+		</where>
+	</select>
+</mapper>

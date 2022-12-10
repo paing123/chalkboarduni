@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Building List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmBuilding" th:object="${model}" th:action="@{/admin/searchbuildings}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Building</h2>
+		<table>
+			<tr>
+				<td>Building Id</td>
+				<td><input type="text" th:field="*{buildingId}"></td>
+			</tr>
+			<tr>
+				<td>Building Name</td>
+				<td><input type="text" th:field="*{buildingName}"></td>
+			</tr>
+			<tr>
+				<td>Building Location</td>
+				<td><input type="text" th:field="*{buildingLocation}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Building List</h2>
+		<a th:href="@{registerbuilding}">Add Building</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.buildingList)}">
+		<table>
+			<tr>
+				<th>Building Id</th>
+				<th>Building Name</th>
+				<th>Building Location</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="building : ${model.buildingList}">
+				<td th:utext="${building.buildingId}"></td>
+				<td th:utext="${building.buildingName}"></td>
+				<td th:utext="${building.buildingLocation}"></td>
+				<td>
+					<a th:href="@{updatebuilding/{id}(id=${building.buildingId})}">Update</a>
+					<a th:href="@{deletebuilding/{id}(id=${building.buildingId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

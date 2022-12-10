@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Advising List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/facultyheader :: header"></div>
+<form id="frmAdvising" th:object="${model}">
+	<div align="center">
+		<h2>Appointment List</h2>
+		<div th:if="${not #lists.isEmpty(model.advisingList)}">
+			<table>
+				<tr>
+					<th>Appointment Id</th>
+					<th>StudentId</th>
+					<th>Student First Name</th>
+					<th>Student Last Name</th>
+					<th>Advising Date</th>
+				</tr>
+				<tr th:each="advising : ${model.advisingList}">
+					<td th:utext="${advising.appointmentId}"></td>
+					<td th:utext="${advising.studentId}"></td>
+					<td th:utext="${advising.studentFirstName}"></td>
+					<td th:utext="${advising.studentLastName}"></td>
+					<td th:utext="${advising.advisingDate}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

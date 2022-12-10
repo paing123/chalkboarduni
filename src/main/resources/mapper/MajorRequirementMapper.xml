@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.MajorRequirementMapper">
+	
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		majorrequirement
+		VALUES
+		(#{majorRequirement.majorId},#{majorRequirement.courseId})
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM majorrequirement WHERE MajorID=#{majorRequirement.majorId} AND CourseID=#{majorRequirement.courseId}
+	</delete>
+
+	<select id="findMajorRequirement" resultType="edu.chalkboarduni.uniregistrationsystem.model.MajorRequirement">
+		SELECT mr.MajorID,m.MajorName,mr.CourseID,c.CourseName FROM major m, course c, majorrequirement mr
+		<where>
+			m.MajorID= mr.MajorID AND c.CourseID = mr.CourseID
+			<if test="majorRequirement.majorId!=null">
+				AND mr.MajorID = #{majorRequirement.majorId}
+			</if>
+			<if test="majorRequirement.courseId!=null">
+				AND mr.CourseID = #{majorRequirement.courseId}
+			</if>
+			<if test="majorRequirement.majorName!=null">
+				AND m.MajorName LIKE '%' #{majorRequirement.majorName} '%'
+			</if>
+			<if test="majorRequirement.courseName!=null">
+				AND c.CourseName LIKE '%' #{majorRequirement.courseName} '%'
+			</if>
+			ORDER BY m.MajorID
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Major</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/updatemajor}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Update Major</h2>
+		<table>
+			<tr>
+				<td>Major Id</td>
+				<td><input type="text" th:field="*{majorId}" maxlength="5" readonly="readonly">
+					<div th:if="${#fields.hasErrors('majorId')}"  th:errors="*{majorId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('departmentId')}"  th:errors="*{departmentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Major Name</td>
+				<td><input type="text" th:field="*{majorName}" maxlength="60">
+					<div th:if="${#fields.hasErrors('majorName')}"  th:errors="*{majorName}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Major Degree</td>
+				<td><input type="text" th:field="*{majorDegree}" maxlength="20">
+					<div th:if="${#fields.hasErrors('majorDegree')}"  th:errors="*{majorDegree}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Credits To Graduate</td>
+				<td><input type="number" th:field="*{creditsToGraduate}" onkeypress="if(this.value.length == 3) return false;">
+					<div th:if="${#fields.hasErrors('creditsToGraduate')}"  th:errors="*{creditsToGraduate}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

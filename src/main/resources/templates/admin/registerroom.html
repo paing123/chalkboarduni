@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Room</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/registerroom}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Room</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>RoomId</td>
+				<td><input type="text" th:field="*{roomId}" maxlength="10">
+					<div th:if="${#fields.hasErrors('roomId')}"  th:errors="*{roomId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Room Capacity</td>
+				<td><input type="number" th:field="*{roomCapacity}" onkeypress="if(this.value.length == 9) return false;">
+					<div th:if="${#fields.hasErrors('roomCapacity')}"  th:errors="*{roomCapacity}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Building Name</td>
+				<td>
+					<select th:field="*{buildingId}" style="width: 100%">
+						<option th:each="building : ${model.buildingList}" th:value="${building.buildingId}" th:text="${building.buildingName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('buildingId')}"  th:errors="*{buildingId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Room Type</td>
+				<td><input type="text" th:field="*{roomType}" maxlength="10">
+					<div th:if="${#fields.hasErrors('roomType')}"  th:errors="*{roomType}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

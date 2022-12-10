@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.RoomMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Room">
+	  <result column="RID" jdbcType="VARCHAR" property="roomId" />
+	  <result column="BldgID" jdbcType="VARCHAR" property="buildingId" />
+	  <result column="BldgName" jdbcType="VARCHAR" property="buildingName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		room
+		VALUES
+		(#{room.roomId},#{room.roomCapacity},#{room.buildingId},#{room.roomType},0)
+	</insert>
+
+	<update id="update">
+		UPDATE room SET
+		RoomCapacity=#{room.roomCapacity},BldgID=#{room.buildingId},RoomType=#{room.roomType}
+		WHERE RID=#{room.roomId}
+	</update>
+
+	<delete id="delete">
+		UPDATE room SET DelFlg = 1 WHERE RID=#{id}
+	</delete>
+
+	<select id="findRoom" resultType="edu.chalkboarduni.uniregistrationsystem.model.Room" resultMap="BaseResultMap">
+		SELECT r.RID, r.RoomCapacity, r.BldgID, r.RoomType, b.BldgName FROM room r, building b
+		<where>
+			r.BldgID = b.BldgID
+			<if test="room.roomId!=null">
+				AND r.RID = #{room.roomId}
+			</if>
+			<if test="room.roomCapacity!=null">
+				AND r.RoomCapacity = #{room.roomCapacity}
+			</if>
+			<if test="room.buildingId!=null">
+				AND r.BldgID = #{room.buildingId}
+			</if>
+			<if test="room.roomType!=null">
+				AND r.RoomType LIKE '%' #{room.roomType} '%'
+			</if>
+			AND r.DelFlg = 0
+		</where>
+	</select>
+</mapper>

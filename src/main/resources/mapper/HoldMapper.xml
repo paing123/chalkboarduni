@@ -1,0 +1,41 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.HoldMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Hold">
+	  <result column="HID" jdbcType="VARCHAR" property="holdId" />
+	  <result column="HType" jdbcType="VARCHAR" property="holdType" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		hold
+		VALUES
+		(#{hold.holdId},#{hold.holdType},0)
+	</insert>
+
+	<update id="update">
+		UPDATE hold SET
+		HType=#{hold.holdType}
+		WHERE HID=#{hold.holdId}
+	</update>
+
+	<delete id="delete">
+		UPDATE hold SET DelFlg = 1 WHERE HID=#{id}
+	</delete>
+
+	<select id="findHold" resultType="edu.chalkboarduni.uniregistrationsystem.model.Hold" resultMap="BaseResultMap">
+		SELECT * FROM hold 
+		<where>
+			<if test="hold.holdId!=null">
+				AND HID = #{hold.holdId}
+			</if>
+			<if test="hold.holdType!=null">
+				AND HType LIKE '%' #{hold.holdType} '%'
+			</if>
+			AND DelFlg = 0
+		</where>
+	</select>
+</mapper>

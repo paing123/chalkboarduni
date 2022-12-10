@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Student</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<form th:action="@{/admin/updatestudent}" th:object="${model}" method="POST">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<h2>Update Student</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" style="width: 100%" disabled="disabled">
+						<option th:each="studentUser : ${model.studentUserList}" th:value="${studentUser.userId}" th:text="${studentUser.userId+' : '+ studentUser.firstName+ ' ' +studentUser.lastName}"></option>
+					</select>
+					<input type="hidden" th:field="*{studentId}">
+					<div th:if="${#fields.hasErrors('studentId')}"  th:errors="*{studentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Student Type</td>
+				<td><input type="text" th:field="*{studentType}" maxlength="20">
+					<div th:if="${#fields.hasErrors('studentType')}"  th:errors="*{studentType}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Student Program</td>
+				<td><input type="text" th:field="*{studentProgram}"  maxlength="50">
+					<div th:if="${#fields.hasErrors('studentProgram')}"  th:errors="*{studentProgram}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Academic Year</td>
+				<td><input type="text" th:field="*{academicYear}" maxlength="30">
+					<div th:if="${#fields.hasErrors('academicYear')}"  th:errors="*{academicYear}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Credits Completed</td>
+				<td><input type="number" th:field="*{creditsCompleted}" onkeypress="if(this.value.length == 3) return false;">
+					<div th:if="${#fields.hasErrors('creditsCompleted')}"  th:errors="*{creditsCompleted}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Student Status</td>
+				<td><input type="text" th:field="*{studentStatus}" maxlength="20">
+					<div th:if="${#fields.hasErrors('studentStatus')}"  th:errors="*{studentStatus}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('departmentId')}"  th:errors="*{departmentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:each="faculty : ${model.facultyList}" th:value="${faculty.facultyId}" th:text="${faculty.facultyId+' : '+faculty.facultyFirstName+' '+faculty.facultyLastName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('facultyId')}"  th:errors="*{facultyId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

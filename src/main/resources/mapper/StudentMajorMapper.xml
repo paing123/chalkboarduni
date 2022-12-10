@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.StudentMajorMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.StudentMajor">
+		<result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  	<result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  	<result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		studentmajor
+		VALUES
+		(#{studentMajor.studentId},#{studentMajor.majorId},#{studentMajor.date})
+	</insert>
+
+	<update id="update">
+		UPDATE studentmajor SET
+		Date=#{studentMajor.date}, MajorID=#{studentMajor.majorId}
+		WHERE StuID=#{studentMajor.studentId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM studentmajor WHERE StuID=#{studentMajor.studentId} AND MajorID=#{studentMajor.majorId}
+	</delete>
+
+	<select id="findStudentMajor" resultType="edu.chalkboarduni.uniregistrationsystem.model.StudentMajor" resultMap="BaseResultMap">
+		SELECT sm.StuID, s.StudentType, u.FName, u.LName, sm.MajorID, m.MajorName, m.MajorDegree, sm.date
+		FROM student s, major m, user u, studentmajor sm
+		<where>
+			sm.StuID = s.StuID AND sm.MajorID = m.MajorID AND s.StuID = u.UID
+			
+			<if test="studentMajor.studentId!=null">
+				AND sm.StuID = #{studentMajor.studentId}
+			</if>
+			<if test="studentMajor.studentType!=null">
+				AND s.StudentType LIKE '%' #{studentMajor.studentType} '%'
+			</if>
+			<if test="studentMajor.studentFirstName!=null">
+				AND u.FName LIKE '%' #{studentMajor.studentFirstName} '%'
+			</if>
+			<if test="studentMajor.studentLastName!=null">
+				AND u.LName LIKE '%' #{studentMajor.studentLastName} '%'
+			</if>
+			<if test="studentMajor.majorId!=null">
+				AND sm.MajorID = #{studentMajor.majorId}
+			</if>
+			<if test="studentMajor.majorName!=null">
+				AND m.MajorName LIKE '%' #{studentMajor.majorName} '%' 
+			</if>
+			<if test="studentMajor.majorDegree!=null">
+				AND m.MajorDegree LIKE '%' #{studentMajor.majorDegree} '%' 
+			</if>
+			<if test="studentMajor.date!=null">
+				AND sm.Date = CAST(#{studentMajor.date} AS DATE)
+			</if>
+			ORDER BY sm.StuID
+		</where>
+	</select>
+</mapper>

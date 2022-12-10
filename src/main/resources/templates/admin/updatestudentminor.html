@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Student Minor</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<form th:action="@{/admin/updatestudentminor}" th:object="${model}" method="POST">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<h2>Update Student Minor</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" style="width: 100%" disabled="disabled">
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId+' : '+student.studentFirstName+ ' ' +student.studentLastName}"></option>
+					</select>
+					<input type="hidden" th:field="*{studentId}">
+					<div th:if="${#fields.hasErrors('studentId')}"  th:errors="*{studentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Minor Id</td>
+				<td>
+					<select th:field="*{minorId}" id="minorId" style="width: 100%">
+						<option th:each="minor : ${model.minorList}" th:value="${minor.minorId}" th:text="${minor.minorId+' : '+minor.minorName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('minorId')}"  th:errors="*{minorId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Date</td>
+				<td><input type="date" th:field="*{date}" style="width: 97%">
+					<div th:if="${#fields.hasErrors('date')}"  th:errors="*{date}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

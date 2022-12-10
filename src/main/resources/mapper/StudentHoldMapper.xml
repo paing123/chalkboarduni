@@ -1,0 +1,47 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.StudentHoldMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.StudentHold">
+	  <result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  <result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	  <result column="HID" jdbcType="VARCHAR" property="holdId" />
+	  <result column="HType" jdbcType="VARCHAR" property="holdType" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		studenthold
+		VALUES
+		(#{studentHold.studentId},#{studentHold.holdId})
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM studenthold WHERE StuID=#{studentHold.studentId} AND HID=#{studentHold.holdId}
+	</delete>
+
+	<select id="findStudentHold" resultType="edu.chalkboarduni.uniregistrationsystem.model.StudentHold" resultMap="BaseResultMap">
+		SELECT sh.HID, sh.StuID, u.FName, u.LName, h.HType FROM studenthold sh, user u, hold h
+		<where>
+			sh.StuID = u.UID AND sh.HID = h.HID	
+			<if test="studentHold.holdId!=null">
+				AND sh.HID = #{studentHold.holdId}
+			</if>
+			<if test="studentHold.studentId!=null">
+				AND sh.StuID = #{studentHold.studentId}
+			</if>
+			<if test="studentHold.studentFirstName!=null">
+				AND u.FName LIKE '%' #{studentHold.studentFirstName} '%'
+			</if>
+			<if test="studentHold.studentLastName!=null">
+				AND u.LName LIKE '%' #{studentHold.studentLastName} '%'
+			</if>
+			<if test="studentHold.holdType!=null"> 
+				AND h.HType LIKE '%' #{studentHold.holdType} '%'
+			</if>
+		</where>
+	</select>
+</mapper>

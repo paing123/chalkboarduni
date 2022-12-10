@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Student History List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/studentheader :: header"></div>
+<form id="frmStudentHistory" th:object="${model}" th:action="@{/faculty/searchstudenthistories}" method="post">
+	<input type="hidden" th:field="*{facultyId}">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Student History</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Student First Name</td>
+				<td><input type="text" th:field="*{studentFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Student Last Name</td>
+				<td><input type="text" th:field="*{studentLastName}"></td>
+			</tr>
+			<tr>
+				<td>Student Type</td>
+				<td><input type="text" th:field="*{studentType}"></td>
+			</tr>
+			<tr>
+				<td>Student Program</td>
+				<td><input type="text" th:field="*{studentProgram}"></td>
+			</tr>
+			<tr>
+				<td>Academic Year</td>
+				<td><input type="text" th:field="*{academicYear}"></td>
+			</tr>
+			<tr>
+				<td>Credits Completed</td>
+				<td><input type="text" th:field="*{creditsCompleted}"></td>
+			</tr>
+			<tr>
+				<td>Student Status</td>
+				<td><input type="text" th:field="*{studentStatus}"></td>
+			</tr>
+			<tr>
+				<td>Course Section Id</td>
+				<td>
+					<select th:field="*{courseSectionId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="courseSection : ${model.courseSectionList}" th:value="${courseSection.courseSectionId}" th:text="${courseSection.courseSectionId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td>Semester Year</td>
+				<td><input type="text" th:field="*{semesterYear}"></td>
+			</tr>
+			<tr>
+				<td>Grade</td>
+				<td><input type="text" th:field="*{grade}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Student History List</h2>
+		<a th:href="@{/faculty/registerstudenthistory}">Add Student History</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.studentHistoryList)}">
+		<table>
+			<tr>
+				<th>Student Id</th>
+				<th>Student First Name</th>
+				<th>Student Last Name</th>
+				<th>Student Type</th>
+				<th>Student Program</th>
+				<th>Academic Year</th>
+				<th>Credits Completed</th>
+				<th>Student Status</th>
+				<th>Course Section Id</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Semester Year</th>
+				<th>Grade</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="studentHistory : ${model.studentHistoryList}">
+				<td th:utext="${studentHistory.studentId}"></td>
+				<td th:utext="${studentHistory.studentFirstName}"></td>
+				<td th:utext="${studentHistory.studentLastName}"></td>
+				<td th:utext="${studentHistory.studentType}"></td>
+				<td th:utext="${studentHistory.studentProgram}"></td>
+				<td th:utext="${studentHistory.academicYear}"></td>
+				<td th:utext="${studentHistory.creditsCompleted}"></td>
+				<td th:utext="${studentHistory.studentStatus}"></td>
+				<td th:utext="${studentHistory.courseSectionId}"></td>
+				<td th:utext="${studentHistory.courseId}"></td>
+				<td th:utext="${studentHistory.courseName}"></td>
+				<td th:utext="${studentHistory.semesterYear}"></td>
+				<td th:utext="${studentHistory.grade}"></td>
+				<td>
+					<a th:href="@{/faculty/updatestudenthistory/{studentid}/{coursesectionid}(studentid=${studentHistory.studentId},coursesectionid=${studentHistory.courseSectionId})}">Update</a>
+					<a th:href="@{/faculty/deletestudenthistory/{studentid}/{coursesectionid}(studentid=${studentHistory.studentId},coursesectionid=${studentHistory.courseSectionId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

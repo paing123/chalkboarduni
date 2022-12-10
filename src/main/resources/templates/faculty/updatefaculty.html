@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Academics &mdash; Website by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="../fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+
+  <link rel="stylesheet" href="../css/jquery.fancybox.min.css">
+
+  <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+
+  <link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css">
+
+  <link rel="stylesheet" href="../css/aos.css">
+  <link href="../css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="../css/style.css">
+
+
+
+</head>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+
+    <div class="py-2 bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-9 d-none d-lg-block">
+            <a href="#" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> Have a questions?</a> 
+            <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span> 10 20 123 456</a> 
+            <a href="#" class="small mr-3"><span class="icon-envelope-o mr-2"></span> info@mydomain.com</a> 
+          </div>
+          <div class="col-lg-3 text-right">
+            <form th:action="@{/logout}" method="POST">
+				<input class="small btn btn-primary px-4 py-2 rounded-0" type="submit" value="Logout" />
+			</form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+
+      <div class="container">
+       <div th:replace="fragments/facultyheader :: header"></div>
+      </div>
+    </header>
+
+    
+    <div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('../images/bg_1.jpg')">
+        <div class="container">
+          <div class="row align-items-end justify-content-center text-center">
+            <div class="col-lg-7">
+              <h2 class="mb-0">Faculty Profile</h2>
+              <p>All these are faculty profiles.</p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    <div class="custom-breadcrumns border-bottom">
+      <div class="container">
+        <a th:href="@{/faculty/facultyhome}">Home</a>
+        <span class="mx-3 icon-keyboard_arrow_right"></span>
+        <span class="current">Faculty Profile</span>
+      </div>
+    </div>
+    <div style="padding: 2.5em;">
+        <div class="container">
+        	 <form th:action="@{/faculty/updatefaculty}" th:object="${model}" method="POST">
+				<div th:if="${model.successMessage == 'updated'}">
+					<div class="alert alert-info" style="text-align: center; font-size: 20px">Congratulation! You have been updated successfully.</div>
+				</div>
+				<div align="center">
+					<h2>Faculty Profile</h2>
+				</div>
+				<br>
+				<table class="table table-hover">
+					<tr>
+						<td>User Id</td>
+						<td><input type="text" class="form-control" th:field="*{userId}" readonly="readonly"></td>
+					</tr>
+					<tr>
+						<td>First Name</td>
+						<td><input type="text" class="form-control" th:field="*{firstName}" maxlength="50" readonly="readonly">
+							<div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Last Name</td>
+						<td><input type="text" class="form-control" th:field="*{lastName}" maxlength="50" readonly="readonly">
+							<div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>DOB</td>
+						<td><input type="date" class="form-control" th:field="*{dob}" readonly="readonly">
+							<div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Street Num</td>
+						<td><input type="text" class="form-control" th:field="*{streetNum}" maxlength="20">
+							<div th:if="${#fields.hasErrors('streetNum')}" th:errors="*{streetNum}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Street</td>
+						<td><input type="text" class="form-control" th:field="*{street}" maxlength="50">
+							<div th:if="${#fields.hasErrors('street')}" th:errors="*{street}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>City</td>
+						<td><input type="text" class="form-control" th:field="*{city}" maxlength="50" >
+							<div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>State</td>
+						<td><input type="text" class="form-control" th:field="*{state}" maxlength="50">
+							<div th:if="${#fields.hasErrors('state')}" th:errors="*{state}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>ZipCode</td>
+						<td><input type="text" class="form-control" th:field="*{zipCode}" maxlength="30" >
+							<div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Country</td>
+						<td><input type="text" class="form-control" th:field="*{country}" maxlength="30" >
+							<div th:if="${#fields.hasErrors('country')}" th:errors="*{country}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Phone Num</td>
+						<td><input type="text" class="form-control" th:field="*{phoneNum}" maxlength="15">
+							<div th:if="${#fields.hasErrors('phoneNum')}" th:errors="*{phoneNum}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>User Type</td>
+						<td>
+							<select th:field="*{userType}" class="form-control" disabled="disabled">
+							  <option value="STUDENT">STUDENT</option>
+							  <option value="ADMIN">ADMIN</option>
+							  <option value="FACULTY">FACULTY</option>
+							  <option value="RESEARCHERSTAFF">RESEARCHERSTAFF</option>
+							</select>
+							<input type="hidden" th:field="*{userType}">
+						</td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td><input type="text" class="form-control" th:field="*{email}" maxlength="50" readonly="readonly">
+							<input type="hidden" th:field="*{password}">
+							<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<a th:href="@{/faculty/facultyhome}" class="btn btn-secondary">Back</a>
+							<button type="submit" class="btn btn-info">Update</button>
+						</td>
+					</tr>
+				</table>
+			 </form>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+    
+
+  </div>
+  <!-- .site-wrap -->
+
+  <!-- loader -->
+  <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
+
+  <script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.stellar.min.js"></script>
+  <script src="../js/jquery.countdown.min.js"></script>
+  <script src="../js/bootstrap-datepicker.min.js"></script>
+  <script src="../js/jquery.easing.1.3.js"></script>
+  <script src="../js/aos.js"></script>
+  <script src="../js/jquery.fancybox.min.js"></script>
+  <script src="../js/jquery.sticky.js"></script>
+  <script src="../js/jquery.mb.YTPlayer.min.js"></script>
+
+
+
+
+  <script src="../js/main.js"></script>
+
+</body>
+
+</html>

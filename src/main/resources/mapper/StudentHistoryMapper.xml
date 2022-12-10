@@ -1,0 +1,82 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.StudentHistoryMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.StudentHistory">
+		<result column="StuID" jdbcType="INTEGER" property="studentId" />
+		<result column="FacID" jdbcType="INTEGER" property="facultyId" />
+	  	<result column="CRN" jdbcType="VARCHAR" property="courseSectionId" />
+	  	<result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  	<result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		studenthistory
+		VALUES
+		(#{studentHistory.studentId},#{studentHistory.courseSectionId},#{studentHistory.grade})
+	</insert>
+
+	<update id="update">
+		UPDATE studenthistory SET
+		Grade=#{studentHistory.grade}
+		WHERE StuID=#{studentHistory.studentId} AND CRN=#{studentHistory.courseSectionId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM studenthistory WHERE StuID=#{studentId} AND CRN=#{courseSectionId}
+	</delete>
+
+	<select id="findStudentHistory" resultType="edu.chalkboarduni.uniregistrationsystem.model.StudentHistory" resultMap="BaseResultMap">
+		SELECT sh.StuID, s.StudentType, s.StudentProgram, s.AcademicYear, s.CreditsCompleted, s.StudentStatus,
+		u.FName, u.LName, sh.CRN, cs.SemesterYear, cs.FacID, sh.Grade, c.CourseID, c.CourseName, t.TimeSlotID 
+		FROM studenthistory sh, student s, user u, course c, coursesection cs, timeslot t
+		<where>
+			sh.StuID = s.StuID AND sh.StuID = u.UID AND sh.CRN = cs.CRN AND cs.CourseID = c.CourseID AND cs.TimeSlotID = t.TimeSlotID
+			<if test="studentHistory.studentId!=null">
+				AND sh.StuID = #{studentHistory.studentId}
+			</if>
+			<if test="studentHistory.studentType!=null">
+				AND s.StudentType LIKE '%' #{studentHistory.studentType} '%'
+			</if>
+			<if test="studentHistory.studentProgram!=null">
+				AND s.StudentProgram LIKE '%' #{studentHistory.studentProgram} '%'
+			</if>
+			<if test="studentHistory.academicYear!=null">
+				AND s.AcademicYear LIKE '%' #{studentHistory.academicYear} '%'
+			</if>
+			<if test="studentHistory.creditsCompleted!=null">
+				AND s.CreditsCompleted = #{studentHistory.creditsCompleted} 
+			</if>
+			<if test="studentHistory.studentStatus!=null">
+				AND s.StudentStatus LIKE '%' #{studentHistory.studentStatus} '%'
+			</if>
+			<if test="studentHistory.studentFirstName!=null">
+				AND u.FName LIKE '%' #{studentHistory.studentFirstName} '%'
+			</if>
+			<if test="studentHistory.studentLastName!=null">
+				AND u.LName LIKE '%' #{studentHistory.studentLastName} '%'
+			</if>
+			<if test="studentHistory.courseSectionId!=null">
+				AND sh.CRN = #{studentHistory.courseSectionId}
+			</if>
+			<if test="studentHistory.semesterYear!=null">
+				AND cs.SemesterYear LIKE '%' #{studentHistory.semesterYear} '%'
+			</if>
+			<if test="studentHistory.grade!=null">
+				AND sh.Grade = #{studentHistory.grade}
+			</if>
+			<if test="studentHistory.facultyId!=null">
+				AND cs.FacID = #{studentHistory.facultyId}
+			</if>
+			<if test="studentHistory.courseName!=null">
+				AND cs.CourseName LIKE '%' #{studentHistory.courseName} '%'
+			</if>
+			<if test="studentHistory.timeSlotId!=null">
+				AND cs.TimeSlotID = #{studentHistory.timeSlotId}
+			</if>
+		</where>
+	</select>
+</mapper>

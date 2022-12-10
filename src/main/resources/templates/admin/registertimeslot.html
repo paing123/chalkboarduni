@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register TimeSlot</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<form th:action="@{/admin/registertimeslot}" th:object="${model}" method="POST">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<h2>Register TimeSlot</h2>
+		<table>
+			<tr>
+				<td>Day</td>
+				<td><input type="text" th:field="*{day}" maxlength="15">
+					<div th:if="${#fields.hasErrors('day')}"  th:errors="*{day}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Period</td>
+				<td><input type="text" th:field="*{period}" maxlength="15">
+					<div th:if="${#fields.hasErrors('period')}"  th:errors="*{period}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

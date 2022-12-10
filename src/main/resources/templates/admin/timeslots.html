@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>TimeSlot List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmTimeSlot" th:object="${model}" th:action="@{/admin/searchtimeslots}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>	
+		<h2>Search TimeSlot</h2>
+		<table>
+			<tr>
+				<td>TimeSlot Id</td>
+				<td><input type="text" th:field="*{timeSlotId}"></td>
+			</tr>
+			<tr>
+				<td>Day</td>
+				<td><input type="text" th:field="*{day}"></td>
+			</tr>
+			<tr>
+				<td>Period</td>
+				<td><input type="text" th:field="*{period}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>TimeSlot List</h2>
+		<a th:href="@{registertimeslot}">Add TimeSlot</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.timeSlotList)}">
+		<table>
+			<tr>
+				<th>TimeSlot Id</th>
+				<th>Day</th>
+				<th>Period</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="timeSlot : ${model.timeSlotList}">
+				<td th:utext="${timeSlot.timeSlotId}"></td>
+				<td th:utext="${timeSlot.day}"></td>
+				<td th:utext="${timeSlot.period}"></td>
+				<td>
+					<a th:href="@{/admin/updatetimeslot/{id}(id=${timeSlot.timeSlotId})}">Update</a>
+					<a th:href="@{/admin/deletetimeslot/{id}(id=${timeSlot.timeSlotId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

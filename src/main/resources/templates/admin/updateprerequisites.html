@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Prerequisites</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/updateprerequisites}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Update Prerequisites</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>PrerequisitesId</td>
+				<td><input type="text" th:field="*{prereqId}" readonly="readonly"></td>
+			</tr>
+			<tr>
+				<td>Required Course Name</td>
+				<td>
+					<select th:field="*{requiredCourseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('requiredCourseId')}"  th:errors="*{requiredCourseId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Main Course Name</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('courseId')}"  th:errors="*{courseId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Min Grade</td>
+				<td><input type="text" th:field="*{minGrade}" maxlength="2"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

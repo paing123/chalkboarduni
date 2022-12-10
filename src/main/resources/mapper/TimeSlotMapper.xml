@@ -1,0 +1,39 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.TimeSlotMapper">
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		timeslot(Day,Period)
+		VALUES
+		(#{timeSlot.day},#{timeSlot.period})
+	</insert>
+
+	<update id="update">
+		UPDATE timeslot SET
+		Day=#{timeSlot.day},Period=#{timeSlot.period}
+		WHERE TimeSlotID=#{timeSlot.timeSlotId}
+	</update>
+
+	<delete id="delete">
+		UPDATE timeslot SET DelFlg=1 WHERE TimeSlotID=#{id}
+	</delete>
+
+	<select id="findTimeSlot" resultType="edu.chalkboarduni.uniregistrationsystem.model.TimeSlot" >
+		SELECT * FROM timeslot 
+		<where>
+			<if test="timeSlot.timeSlotId!=null">
+				AND TimeSlotID = #{timeSlot.timeSlotId}
+			</if>
+			<if test="timeSlot.day!=null">
+				AND Day LIKE '%' #{timeSlot.day} '%'
+			</if>
+			<if test="timeSlot.period!=null">
+				AND Period LIKE '%' #{timeSlot.period} '%'
+			</if>
+			AND DelFlg = 0
+		</where>
+	</select>
+</mapper>

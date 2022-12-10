@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Building</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/registerbuilding}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Building</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>BuildingId</td>
+				<td><input type="text" th:field="*{buildingId}" maxlength="8">
+					<div th:if="${#fields.hasErrors('buildingId')}"  th:errors="*{buildingId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Building Name</td>
+				<td><input type="text" th:field="*{buildingName}" maxlength="30">
+					<div th:if="${#fields.hasErrors('buildingName')}"  th:errors="*{buildingName}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Building Location</td>
+				<td><input type="text" th:field="*{buildingLocation}" maxlength="50">
+					<div th:if="${#fields.hasErrors('buildingLocation')}"  th:errors="*{buildingLocation}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

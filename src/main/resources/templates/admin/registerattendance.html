@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Attendance</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/registerattendance}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Attendance</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" style="width: 100%">
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId +' : '+student.studentFirstName+' '+student.studentLastName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('studentId')}"  th:errors="*{studentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Section Id</td>
+				<td>
+					<select th:field="*{courseSectionId}" style="width: 100%">
+						<option th:each="courseSection : ${model.courseSectionList}" th:value="${courseSection.courseSectionId}" th:text="${courseSection.courseSectionId+' : '+courseSection.semesterYear}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('courseSectionId')}"  th:errors="*{courseSectionId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Date</td>
+				<td><input type="date" th:field="*{date}" style="width: 97%">
+					<div th:if="${#fields.hasErrors('date')}"  th:errors="*{date}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>AbsentPresent</td>
+				<td>
+					<select th:field="*{absentPresent}" style="width: 100%">
+					  <option value="ABSENT">ABSENT</option>
+					  <option value="PRESENT">PRESENT</option>
+					</select>
+					<div th:if="${#fields.hasErrors('absentPresent')}"  th:errors="*{absentPresent}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

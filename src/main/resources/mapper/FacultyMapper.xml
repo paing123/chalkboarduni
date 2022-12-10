@@ -1,0 +1,61 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.FacultyMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Faculty">
+	  <result column="FacID" jdbcType="VARCHAR" property="facultyId" />
+	  <result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		faculty
+		VALUES
+		(#{faculty.facultyId},#{faculty.facultyType},#{faculty.rank},#{faculty.officeId},#{faculty.officeHours},0)
+	</insert>
+
+	<update id="update">
+		UPDATE faculty SET
+		FacultyType=#{faculty.facultyType},Rank=#{faculty.rank},OfficeId=#{faculty.officeId},OfficeHours=#{faculty.officeHours}
+		WHERE FacID=#{faculty.facultyId}
+	</update>
+
+	<delete id="delete">
+		UPDATE faculty SET DelFlg = 1 WHERE FacID=#{id} 
+	</delete>
+
+	<select id="findFaculty" resultType="edu.chalkboarduni.uniregistrationsystem.model.Faculty" resultMap="BaseResultMap">
+		SELECT f.FacID, f.FacultyType, f.Rank, f.OfficeId, f.OfficeHours, r.RoomType, u.FName, u.LName FROM faculty f, room r, user u
+		<where>
+			r.RID = f.OfficeId AND f.FacID = u.UID
+			<if test="faculty.facultyId!=null">
+				AND f.FacID = #{faculty.facultyId}
+			</if>
+			<if test="faculty.facultyType!=null">
+				AND f.FacultyType LIKE '%' #{faculty.facultyType} '%'
+			</if>
+			<if test="faculty.rank!=null">
+				AND f.Rank LIKE '%' #{faculty.rank} '%'
+			</if>
+			<if test="faculty.officeId!=null">
+				AND f.OfficeId = #{faculty.officeId}
+			</if>
+			<if test="faculty.roomType!=null">
+				AND r.RoomType LIKE '%' #{faculty.roomType} '%'
+			</if>
+			<if test="faculty.officeHours!=null">
+				AND f.OfficeHours LIKE '%' #{faculty.officeHours} '%'
+			</if>
+			<if test="faculty.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{faculty.facultyFirstName} '%'
+			</if>
+			<if test="faculty.facultyLastName!=null">
+				AND u.LName LIKE '%' #{faculty.facultyLastName} '%'
+			</if>
+			AND f.DelFlg = 0 AND u.DelFlg = 0
+		</where>
+	</select>
+</mapper>

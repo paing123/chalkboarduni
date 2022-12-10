@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Department</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/registerdepartment}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Department</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>DepartmentId</td>
+				<td><input type="text" th:field="*{departmentId}" maxlength="5">
+					<div th:if="${#fields.hasErrors('departmentId')}"  th:errors="*{departmentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td><input type="text" th:field="*{departmentName}" maxlength="30">
+					<div th:if="${#fields.hasErrors('departmentName')}"  th:errors="*{departmentName}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="text" th:field="*{email}" maxlength="40">
+					<div th:if="${#fields.hasErrors('email')}"  th:errors="*{email}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Phone</td>
+				<td><input type="text" th:field="*{phoneNum}" maxlength="15">
+					<div th:if="${#fields.hasErrors('phoneNum')}"  th:errors="*{phoneNum}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Building Room</td>
+				<td><input type="text" th:field="*{buildingRoom}" maxlength="30">
+					<div th:if="${#fields.hasErrors('buildingRoom')}"  th:errors="*{buildingRoom}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Chair</td>
+				<td><input type="text" th:field="*{departmentChair}" maxlength="50">
+					<div th:if="${#fields.hasErrors('departmentChair')}"  th:errors="*{departmentChair}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Secretary</td>
+				<td><input type="text" th:field="*{departmentSecretary}" maxlength="50">
+					<div th:if="${#fields.hasErrors('departmentSecretary')}"  th:errors="*{departmentSecretary}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

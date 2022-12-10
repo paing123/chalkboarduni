@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.CourseMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Course">
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		course
+		VALUES
+		(#{course.courseId},#{course.departmentId},#{course.courseName},#{course.courseType},#{course.credit},0)
+	</insert>
+
+	<update id="update">
+		UPDATE course SET
+		DID=#{course.departmentId},CourseName=#{course.courseName},CourseType=#{course.courseType},
+		Credit=#{course.credit}
+		WHERE courseId=#{course.courseId}
+	</update>
+
+	<delete id="delete">
+		UPDATE course SET DelFlg = 1 WHERE CourseId=#{id}
+	</delete>
+
+	<select id="findCourse" resultType="edu.chalkboarduni.uniregistrationsystem.model.Course" resultMap="BaseResultMap">
+		SELECT c.CourseID,c.DID,d.DepartmentName,c.CourseName,c.CourseType,c.Credit FROM course c, department d
+		<where>
+			c.DID = d.DID
+			<if test="course.courseId!=null">
+				AND c.CourseId = #{course.courseId}
+			</if>
+			<if test="course.departmentId!=null">
+				AND c.DID = #{course.departmentId}
+			</if>
+			<if test="course.courseName!=null">
+				AND c.CourseName LIKE '%' #{course.courseName} '%'
+			</if>
+			<if test="course.courseType!=null">
+				AND c.CourseType LIKE '%' #{course.courseType} '%'
+			</if>
+			<if test="course.credit!=null">
+				AND c.Credit = #{course.credit}
+			</if>
+			AND c.DelFlg = 0
+		</where>
+	</select>
+</mapper>

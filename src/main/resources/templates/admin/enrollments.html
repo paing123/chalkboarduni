@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Enrollment List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+	
+	input[type='text']{
+		width: 96%;
+	}
+</style>
+<script>
+	
+	function deleteEnrollment(studentId, courseSectionId){
+		document.getElementById("studentId").value = studentId;
+		document.getElementById("courseSectionId").value = courseSectionId;
+		document.forms.frmEnrollment.action = "deleteenrollment";
+		document.forms.frmEnrollment.submit();
+	}
+	
+</script>
+</head>
+<body>
+<form id="frmEnrollment" th:object="${model}" th:action="@{/enrollments}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Enrollment</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" id="studentId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Student First Name</td>
+				<td><input type="text" th:field="*{studentFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Student Last Name</td>
+				<td><input type="text" th:field="*{studentLastName}"></td>
+			</tr>
+			<tr>
+				<td>Course Section Id</td>
+				<td>
+					<select th:field="*{courseSectionId}" id="courseSectionId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="courseSection : ${model.courseSectionList}" th:value="${courseSection.courseSectionId}" th:text="${courseSection.courseSectionId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Section Number</td>
+				<td><input type="text" th:field="*{sectionNumber}"></td>
+			</tr>
+			<tr>
+				<td>Available Seats</td>
+				<td><input type="text" th:field="*{availableSeats}"></td>
+			</tr>
+			<tr>
+				<td>Semester Year</td>
+				<td><input type="text" th:field="*{semesterYear}"></td>
+			</tr>
+			<tr>
+				<td>Time Window</td>
+				<td><input type="date" th:field="*{timeWindow}" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td>Enrollment Date</td>
+				<td><input type="date" th:field="*{enrollmentDate}" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Enrollment List</h2>
+		<a th:href="@{registerenrollment}">Add Enrollment</a>
+		<br><br>
+		<table>
+			<tr>
+				<th>Student Id</th>
+				<th>Student First Name</th>
+				<th>Student Last Name</th>
+				<th>Course Section Id</th>
+				<th>Section Number</th>
+				<th>Available Seats</th>
+				<th>Semester Year</th>
+				<th>Time Window</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Enrollment Date</th>	
+				<th>Action</th>
+			</tr>
+			<tr th:each="enrollment : ${model.enrollmentList}">
+				<td th:utext="${enrollment.studentId}"></td>
+				<td th:utext="${enrollment.studentFirstName}"></td>
+				<td th:utext="${enrollment.studentLastName}"></td>
+				<td th:utext="${enrollment.courseSectionId}"></td>
+				<td th:utext="${enrollment.sectionNumber}"></td>
+				<td th:utext="${enrollment.availableSeats}"></td>
+				<td th:utext="${enrollment.semesterYear}"></td>
+				<td th:utext="${enrollment.timeWindow}"></td>
+				<td th:utext="${enrollment.courseId}"></td>
+				<td th:utext="${enrollment.courseName}"></td>
+				<td th:utext="${enrollment.enrollmentDate}"></td>
+				<td>
+					<button type="button" th:onclick="deleteEnrollment([[${enrollment.studentId}]],[[${enrollment.courseSectionId}]])">Delete</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

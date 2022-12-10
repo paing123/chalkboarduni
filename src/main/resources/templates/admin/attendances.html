@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Attendance List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+	function findUpdateAttendance(studentId, courseSectionId, date){
+		document.getElementById("studentId").value = studentId;
+		document.getElementById("courseSectionId").value = courseSectionId;
+		date = changeDateFormat(date);
+		document.getElementById("date").value = date;
+		document.getElementById("absentPresent").value = null;
+		document.forms.frmAttendance.action = "updateattendanceform";
+		document.forms.frmAttendance.submit();
+	}
+	
+	function deleteAttendance(studentId, courseSectionId, date){
+		document.getElementById("studentId").value = studentId;
+		document.getElementById("courseSectionId").value = courseSectionId;
+		date = changeDateFormat(date);
+		document.getElementById("date").value = date;
+		document.forms.frmAttendance.action = "deleteattendance";
+		document.forms.frmAttendance.submit();
+	}
+	
+	function changeDateFormat(date){
+		let dateAttr = date.split("-");
+		let newDate = dateAttr[2]+"-"+dateAttr[0]+"-"+dateAttr[1];
+		return newDate;
+	}
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmAttendance" th:object="${model}" th:action="@{/admin/searchattendances}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+			<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Attendance</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" id="studentId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Student First Name</td>
+				<td><input type="text" th:field="*{studentFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Student Last Name</td>
+				<td><input type="text" th:field="*{studentLastName}"></td>
+			</tr>
+			<tr>
+				<td>Faculty Id</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="faculty : ${model.facultyList}" th:value="${faculty.facultyId}" th:text="${faculty.facultyId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Faculty First Name</td>
+				<td><input type="text" th:field="*{facultyFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Faculty Last Name</td>
+				<td><input type="text" th:field="*{facultyLastName}"></td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td>Course Section Id</td>
+				<td>
+					<select th:field="*{courseSectionId}" id="courseSectionId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="courseSection : ${model.courseSectionList}" th:value="${courseSection.courseSectionId}" th:text="${courseSection.courseSectionId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Semester Year</td>
+				<td><input type="text" th:field="*{semesterYear}"></td>
+			</tr>
+			<tr>
+				<td>Date</td>
+				<td><input type="date" th:field="*{date}" id="date" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td>AbsentPresent</td>
+				<td>
+					<select th:field="*{absentPresent}" id="absentPresent" style="width: 100%">
+					  <option value=""></option>
+					  <option value="ABSENT">ABSENT</option>
+					  <option value="PRESENT">PRESENT</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit" >Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Attendance List</h2>
+		<a th:href="@{/faculty/registerattendance}">Add Attendance</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.attendanceList)}">
+		<table>
+			<tr>
+				<th>Student Id</th>
+				<th>Student First Name</th>
+				<th>Student Last Name</th>
+				<th>Faculty Id</th>
+				<th>Faculty First Name</th>
+				<th>Faculty Last Name</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Course Section Id</th>
+				<th>Semester Year</th>
+				<th>Date</th>
+				<th>Absent/Present</th>
+				
+				<th>Action</th>
+			</tr>
+			<tr th:each="attendance : ${model.attendanceList}">
+				<td th:utext="${attendance.studentId}"></td>
+				<td th:utext="${attendance.studentFirstName}"></td>
+				<td th:utext="${attendance.studentLastName}"></td>
+				<td th:utext="${attendance.facultyId}"></td>
+				<td th:utext="${attendance.facultyFirstName}"></td>
+				<td th:utext="${attendance.facultyLastName}"></td>
+				<td th:utext="${attendance.courseId}"></td>
+				<td th:utext="${attendance.courseName}"></td>
+				<td th:utext="${attendance.courseSectionId}"></td>
+				<td th:utext="${attendance.semesterYear}"></td>
+				<td th:utext="${attendance.date}"></td>
+				<td th:utext="${attendance.absentPresent}"></td>
+				<td>
+					<button type="button" th:onclick="findUpdateAttendance([[${attendance.studentId}]],[[${attendance.courseSectionId}]],[[${attendance.date}]])"  escapeXml='false'>Update</button>
+					<button type="button" th:onclick="deleteAttendance([[${attendance.studentId}]],[[${attendance.courseSectionId}]],[[${attendance.date}]])"  escapeXml='false'>Delete</button>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

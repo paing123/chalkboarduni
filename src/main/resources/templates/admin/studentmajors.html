@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Student Major List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+	
+	input[type='text']{
+		width: 96%;
+	}
+</style>
+<script>
+
+	function updateStudentMajor(studentId, majorId){
+		document.getElementById("studentId").value = studentId;
+		document.forms.frmStudentMajor.action = "updatestudentmajorform";
+		document.forms.frmStudentMajor.submit();
+	}
+		
+	function deleteStudentMajor(studentId, majorId){
+		document.getElementById("studentId").value = studentId;
+		document.getElementById("majorId").value = majorId;
+		document.forms.frmStudentMajor.action = "deletestudentmajor";
+		document.forms.frmStudentMajor.submit();
+	}
+</script>
+</head>
+<body>
+<form id="frmStudentMajor" th:object="${model}" th:action="@{/admin/searchstudentmajors}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Student Major</h2>
+		<table>
+			<tr>
+				<td>Student Id</td>
+				<td>
+					<select th:field="*{studentId}" id="studentId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="student : ${model.studentList}" th:value="${student.studentId}" th:text="${student.studentId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Student Type</td>
+				<td><input type="text" th:field="*{studentType}"></td>
+			</tr>
+			<tr>
+				<td>Student First Name</td>
+				<td><input type="text" th:field="*{studentFirstName}"></td>
+			</tr>
+			<tr>
+				<td>Student Last Name</td>
+				<td><input type="text" th:field="*{studentLastName}"></td>
+			</tr>
+			<tr>
+				<td>Major Id</td>
+				<td>
+					<select th:field="*{majorId}" id="majorId" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="major : ${model.majorList}" th:value="${major.majorId}" th:text="${major.majorId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Major Name</td>
+				<td><input type="text" th:field="*{majorName}"></td>
+			</tr>
+			<tr>
+				<td>Major Degree</td>
+				<td><input type="text" th:field="*{majorDegree}"></td>
+			</tr>
+			<tr>
+				<td>Date</td>
+				<td><input type="date" th:field="*{date}" id="date" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Student Major List</h2>
+		<a th:href="@{/admin/registerstudentmajor}">Add Student Major</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.studentMajorList)}">
+		<table>
+			<tr>
+				<th>Student Id</th>
+				<th>Student Type</th>
+				<th>Student First Name</th>
+				<th>Student Last Name</th>
+				<th>Major Id</th>
+				<th>Major Name</th>
+				<th>Major Degree</th>
+				<th>Date</th>	
+				<th>Action</th>
+			</tr>
+			<tr th:each="studentMajor : ${model.studentMajorList}">
+				<td th:utext="${studentMajor.studentId}"></td>
+				<td th:utext="${studentMajor.studentType}"></td>
+				<td th:utext="${studentMajor.studentFirstName}"></td>
+				<td th:utext="${studentMajor.studentLastName}"></td>
+				<td th:utext="${studentMajor.majorId}"></td>
+				<td th:utext="${studentMajor.majorName}"></td>
+				<td th:utext="${studentMajor.majorDegree}"></td>
+				<td th:utext="${studentMajor.date}"></td>
+				<td>
+					<button type="button" th:onclick="updateStudentMajor([[${studentMajor.studentId}]],[[${studentMajor.majorId}]])">Update</button>
+					<button type="button" th:onclick="deleteStudentMajor([[${studentMajor.studentId}]],[[${studentMajor.majorId}]])">Delete</button>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

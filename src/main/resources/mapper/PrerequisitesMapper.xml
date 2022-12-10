@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.PrerequisitesMapper">
+	
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		prerequisites(RequiredCourseID,MinGrade,CourseID)
+		VALUES
+		(#{prerequisites.requiredCourseId},#{prerequisites.minGrade},#{prerequisites.courseId})
+	</insert>
+
+	<update id="update">
+		UPDATE prerequisites SET
+		RequiredCourseID=#{prerequisites.requiredCourseId},MinGrade=#{prerequisites.minGrade},CourseID=#{prerequisites.courseId}
+		WHERE PrereqID=#{prerequisites.prereqId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM prerequisites WHERE PrereqId=#{id}
+	</delete>
+
+	<select id="findPrerequisites" resultType="edu.chalkboarduni.uniregistrationsystem.model.Prerequisites">
+		SELECT p.PrereqID, p.RequiredCourseID, (SELECT cs.CourseName FROM course cs where cs.CourseID = p.RequiredCourseID) as RequiredCourseName, 
+			   p.CourseID, c.CourseName, p.MinGrade 
+			   FROM prerequisites p, course c
+		<where>
+			p.CourseID = c.CourseID
+			<if test="prerequisites.prereqId!=null">
+				AND p.PrereqID = #{prerequisites.prereqId}
+			</if>
+			<if test="prerequisites.courseId!=null">
+				AND p.CourseID = #{prerequisites.courseId}
+			</if>
+			<if test="prerequisites.courseName!=null">
+				AND c.CourseName LIKE '%' #{prerequisites.courseName} '%'
+			</if>
+			<if test="prerequisites.requiredCourseId!=null">
+				AND p.RequiredCourseID = #{prerequisites.requiredCourseId}
+			</if>
+			<if test="prerequisites.requiredCourseName!=null">
+				AND (SELECT cs.CourseName FROM course cs where cs.CourseID = p.RequiredCourseID) LIKE '%' #{prerequisites.requiredCourseName} '%'
+			</if>
+			<if test="prerequisites.minGrade!=null">
+				AND p.MinGrade = #{prerequisites.minGrade}
+			</if>
+			AND p.DelFlg = 0 ORDER BY p.PrereqID
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Register Minor</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/registerminor}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Register Minor</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>Minor Id</td>
+				<td><input type="text" th:field="*{minorId}" maxlength="5">
+					<div th:if="${#fields.hasErrors('minorId')}"  th:errors="*{minorId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department Name</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('departmentId')}"  th:errors="*{departmentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Minor Name</td>
+				<td><input type="text" th:field="*{minorName}" maxlength="30">
+					<div th:if="${#fields.hasErrors('minorName')}"  th:errors="*{minorName}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Required Credits</td>
+				<td><input type="number" th:field="*{requiredCredits}" onkeypress="if(this.value.length == 2) return false;">
+					<div th:if="${#fields.hasErrors('requiredCredits')}"  th:errors="*{requiredCredits}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Register</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

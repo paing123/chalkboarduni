@@ -1,0 +1,100 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.CourseSectionMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.CourseSection">
+	  <result column="CRN" jdbcType="INTEGER" property="courseSectionId" />
+	  <result column="FacID" jdbcType="INTEGER" property="facultyId" />
+	  <result column="RID" jdbcType="INTEGER" property="roomId" />
+	  <result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		coursesection
+		VALUES
+		(#{courseSection.courseSectionId},#{courseSection.sectionNumber},#{courseSection.availableSeats},
+		 #{courseSection.semesterYear},#{courseSection.timeWindow},#{courseSection.facultyId},
+		 #{courseSection.timeSlotId},#{courseSection.roomId},#{courseSection.courseId},0)
+	</insert>
+
+	<update id="update">
+		UPDATE coursesection SET
+		SectionNumber=#{courseSection.sectionNumber}, AvailableSeats=#{courseSection.availableSeats}, SemesterYear=#{courseSection.semesterYear},
+		TimeWindow=#{courseSection.timeWindow}, FacID=#{courseSection.facultyId}, TimeSlotID=#{courseSection.timeSlotId},
+		RID=#{courseSection.roomId}, CourseID=#{courseSection.courseId}
+		WHERE CRN=#{courseSection.courseSectionId}
+	</update>
+
+	<delete id="delete">
+		UPDATE coursesection SET DelFlg = 1 WHERE CRN=#{id}
+	</delete>
+
+	<select id="findCourseSection" resultType="edu.chalkboarduni.uniregistrationsystem.model.CourseSection" resultMap="BaseResultMap">
+		SELECT cs.CRN, cs.SectionNumber, cs.AvailableSeats, (cs.AvailableSeats - (SELECT count(*) FROM enrollment e WHERE e.CRN = cs.CRN)) AS RemainingSeats , cs.SemesterYear, cs.TimeWindow, cs.FacID, cs.TimeSlotID, cs.RID, cs.CourseID, ts.Day, ts.Period, 
+		r.RoomType, c.CourseName, c.Credit, d.DID, d.DepartmentName, u.FName, u.LName  FROM coursesection cs, timeslot ts, room r, course c, department d, user u, faculty f
+		<where>
+			cs.FacID = f.FacID AND f.FacID = u.UID AND cs.TimeSlotID = ts.TimeSlotID AND cs.RID = r.RID AND cs.CourseID = c.CourseID AND c.DID = d.DID
+			<if test="courseSection.courseSectionId!=null">
+				AND cs.CRN = #{courseSection.courseSectionId}
+			</if>
+			<if test="courseSection.sectionNumber!=null">
+				AND cs.SectionNumber = #{courseSection.sectionNumber}
+			</if>
+			<if test="courseSection.availableSeats!=null">
+				AND cs.AvailableSeats = #{courseSection.availableSeats}
+			</if>
+			<if test="courseSection.semesterYear!=null">
+				AND cs.SemesterYear LIKE '%' #{courseSection.semesterYear} '%' 
+			</if>
+			<if test="courseSection.timeWindow!=null">
+				AND cs.TimeWindow LIKE '%' #{courseSection.timeWindow} '%'
+			</if>
+			<if test="courseSection.facultyId!=null">
+				AND cs.FacID = #{courseSection.facultyId}
+			</if>
+			<if test="courseSection.timeSlotId!=null">
+				AND cs.TimeSlotID = #{courseSection.timeSlotId}
+			</if>
+			<if test="courseSection.roomId!=null">
+				AND cs.RID = #{courseSection.roomId}
+			</if>
+			<if test="courseSection.courseId!=null">
+				AND cs.CourseID = #{courseSection.courseId}
+			</if>
+			<if test="courseSection.departmentId!=null">
+				AND d.DID = #{courseSection.departmentId}
+			</if>
+			<if test="courseSection.departmentName!=null">
+				AND d.DepartmentName LIKE '%' #{courseSection.departmentName} '%'
+			</if>
+			<if test="courseSection.day!=null">
+				AND ts.Day = #{courseSection.day}
+			</if>
+			<if test="courseSection.day!=null">
+				AND ts.Period LIKE '%' #{courseSection.period} '%' 
+			</if>
+			<if test="courseSection.roomType!=null">
+				AND r.roomType LIKE '%' #{courseSection.roomType} '%' 
+			</if>
+			<if test="courseSection.courseName!=null">
+				AND c.CourseName LIKE '%' #{courseSection.courseName} '%' 
+			</if>
+			<if test="courseSection.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{courseSection.facultyFirstName} '%' 
+			</if>
+			<if test="courseSection.facultyLastName!=null">
+				AND u.LName LIKE '%' #{courseSection.facultyLastName} '%' 
+			</if>
+			<if test="courseSection.credit!=null">
+				AND c.Credit = #{courseSection.credit}
+			</if>
+			AND cs.DelFlg = 0
+		</where>
+		ORDER BY cs.CRN
+	</select>
+</mapper>

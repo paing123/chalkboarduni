@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Faculty Department List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form id="frmFacultyDepartment" th:object="${model}" th:action="@{/admin/searchfacultydepartments}" method="post">
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Faculty Department</h2>
+		<table>
+			<tr>
+				<td>Faculty</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="facultyUser : ${model.facultyList}" th:value="${facultyUser.facultyId}" th:text="${facultyUser.facultyFirstName+ ' ' +facultyUser.facultyLastName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Department</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Percent Time</td>
+				<td><input type="text" th:field="*{percentTime}"></td>
+			</tr>
+			<tr>
+				<td>Date Of Appointment</td>
+				<td><input type="date" th:field="*{dateOfAppointment}" style="width: 97%"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Faculty Department List</h2>
+		<a th:href="@{registerfacultydepartment}">Add Faculty Department</a>
+		<br><br>
+		<div th:if="${not #lists.isEmpty(model.facultyDepartmentList)}">
+		<table>
+			<tr>
+				<th>Faculty Id</th>
+				<th>Faculty Name</th>
+				<th>Department Id</th>
+				<th>Department Name</th>
+				<th>Percent Time</th>
+				<th>Date of Appointment</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="facultyDepartment : ${model.facultyDepartmentList}">
+				<td th:utext="${facultyDepartment.facultyId}"></td>
+				<td th:utext="${facultyDepartment.facultyFirstName +' '+facultyDepartment.facultyLastName}"></td>
+				<td th:utext="${facultyDepartment.departmentId}"></td>
+				<td th:utext="${facultyDepartment.departmentName}"></td>
+				<td th:utext="${facultyDepartment.percentTime}"></td>
+				<td th:utext="${facultyDepartment.dateOfAppointment}"></td>
+				<td>
+					<a th:href="@{/admin/updatefacultydepartment/{facid}/{did}(facid=${facultyDepartment.facultyId},did=${facultyDepartment.departmentId})}">Update</a>
+					<a th:href="@{/admin/deletefacultydepartment/{facid}/{did}(facid=${facultyDepartment.facultyId},did=${facultyDepartment.departmentId})}">Delete</a>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

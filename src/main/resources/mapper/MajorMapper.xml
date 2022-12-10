@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.MajorMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Major">
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		major
+		VALUES
+		(#{major.majorId},#{major.departmentId},#{major.majorName},#{major.majorDegree},#{major.creditsToGraduate},0)
+	</insert>
+
+	<update id="update">
+		UPDATE major SET
+		DID=#{major.departmentId},MajorName=#{major.majorName},MajorDegree=#{major.majorDegree},
+		CreditsToGraduate=#{major.creditsToGraduate}
+		WHERE MajorID=#{major.majorId}
+	</update>
+
+	<delete id="delete">
+		UPDATE major SET DelFlg = 1 WHERE MajorID=#{id}
+	</delete>
+
+	<select id="findMajor" resultType="edu.chalkboarduni.uniregistrationsystem.model.Major" resultMap="BaseResultMap">
+		SELECT m.MajorID,m.DID,d.DepartmentName,m.MajorName,m.MajorDegree,m.CreditsToGraduate FROM major m, department d
+		<where>
+			m.DID = d.DID
+			<if test="major.majorId!=null">
+				AND m.MajorID = #{major.majorId}
+			</if>
+			<if test="major.departmentId!=null">
+				AND m.DID = #{major.departmentId}
+			</if>
+			<if test="major.majorName!=null">
+				AND m.MajorName LIKE '%' #{major.majorName} '%'
+			</if>
+			<if test="major.majorDegree!=null">
+				AND m.MajorDegree LIKE '%' #{major.majorDegree} '%'
+			</if>
+			<if test="major.creditsToGraduate!=null">
+				AND m.CreditsToGraduate = #{major.creditsToGraduate}
+			</if>
+			AND m.DelFlg = 0
+		</where>
+	</select>
+</mapper>

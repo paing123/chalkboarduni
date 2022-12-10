@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Student Major Course List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+	
+	input {
+		width: 96%;
+	}
+	
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmStudentMajorCourse" th:object="${model}">
+<div th:replace="fragments/studentheader :: header"></div>
+	<div align="center">
+		<h2>Student Major Course List</h2>
+		<br>
+		<table>
+			<tr>
+				<th>Major Id</th>
+				<th>Major Name</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Status</th>
+				
+			</tr>
+			<tr th:each="majReq : ${model.majorRequirementList}">
+				<td th:utext="${majReq.majorId}"></td>
+				<td th:utext="${majReq.majorName}"></td>
+				<td th:utext="${majReq.courseId}"></td>
+				<td th:utext="${majReq.courseName}"></td>
+				<td th:utext="${majReq.status}"></td>			
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

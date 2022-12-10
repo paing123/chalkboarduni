@@ -1,0 +1,65 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.FacultyHistoryMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.FacultyHistory">
+		<result column="FacID" jdbcType="INTEGER" property="facultyId" />
+	  	<result column="CRN" jdbcType="VARCHAR" property="courseSectionId" />
+	  	<result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  	<result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		facultyhistory
+		VALUES
+		(#{facultyHistory.facultyId},#{facultyHistory.courseSectionId})
+	</insert>
+
+	<update id="update">
+		UPDATE facultyhistory SET
+		CRN=#{facultyHistory.courseSectionId}
+		WHERE FacID=#{facultyHistory.facultyId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM facultyhistory WHERE FacID=#{facId} AND CRN=#{courseSectionId}
+	</delete>
+
+	<select id="findFacultyHistory" resultType="edu.chalkboarduni.uniregistrationsystem.model.FacultyHistory" resultMap="BaseResultMap">
+		SELECT fh.FacID, u.FName, u.LName, f.FacultyType, f.Rank, fh.CRN, cs.SemesterYear, c.CourseID, c.CourseName
+		FROM facultyhistory fh, faculty f, user u, course c, coursesection cs
+		<where>
+			fh.FacID = f.FacID AND fh.FacID = u.UID AND fh.CRN = cs.CRN AND cs.CourseID = c.CourseID
+			<if test="facultyHistory.facultyId!=null">
+				AND fh.FacID = #{facultyHistory.facultyId}
+			</if>
+			<if test="facultyHistory.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{facultyhistory.facultyFirstName} '%'
+			</if>
+			<if test="facultyHistory.facultyLastName!=null">
+				AND u.LName LIKE '%' #{facultyhistory.facultyLastName} '%'
+			</if>
+			<if test="facultyHistory.facultyType!=null">
+				AND f.FacultyType LIKE '%' #{facultyhistory.facultyType} '%'
+			</if>
+			<if test="facultyHistory.rank!=null">
+				AND f.Rank LIKE '%' #{facultyhistory.rank} '%'
+			</if>
+			<if test="facultyHistory.courseSectionId!=null">
+				AND fh.CRN = #{facultyhistory.courseSectionId} 
+			</if>
+			<if test="facultyHistory.semesterYear!=null">
+				AND cs.SemesterYear LIKE '%' #{facultyhistory.semesterYear} '%'
+			</if>
+			<if test="facultyHistory.courseId!=null">
+				AND c.CourseID LIKE '%' #{facultyhistory.courseId} '%'
+			</if>
+			<if test="facultyHistory.courseName!=null">
+				AND c.CourseName LIKE '%' #{facultyhistory.courseName} '%'
+			</if>
+		</where>
+	</select>
+</mapper>

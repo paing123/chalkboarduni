@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Faculty History List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div th:replace="fragments/facultyheader :: header"></div>
+<form id="frmFacultyHistory" th:object="${model}">
+	<div align="center">
+		<h2>Faculty History List</h2>
+		<div th:if="${not #lists.isEmpty(model.facultyHistoryList)}">
+		<table>
+			<tr>
+				<th>Faculty Id</th>
+				<th>Faculty First Name</th>
+				<th>Faculty Last Name</th>
+				<th>Faculty Type</th>
+				<th>Rank</th>
+				<th>Course Section Id</th>
+				<th>Semester Year</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+			</tr>
+			<tr th:each="facultyHistory : ${model.facultyHistoryList}">
+				<td th:utext="${facultyHistory.facultyId}"></td>
+				<td th:utext="${facultyHistory.facultyFirstName}"></td>
+				<td th:utext="${facultyHistory.facultyLastName}"></td>
+				<td th:utext="${facultyHistory.facultyType}"></td>
+				<td th:utext="${facultyHistory.rank}"></td>
+				<td th:utext="${facultyHistory.courseSectionId}"></td>
+				<td th:utext="${facultyHistory.semesterYear}"></td>
+				<td th:utext="${facultyHistory.courseId}"></td>
+				<td th:utext="${facultyHistory.courseName}"></td>
+			</tr>
+		</table>
+		</div>
+	</div>
+</form>
+</body>
+</html>

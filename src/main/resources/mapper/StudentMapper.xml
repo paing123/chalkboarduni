@@ -1,0 +1,76 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.StudentMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Student">
+		<result column="StuID" jdbcType="INTEGER" property="studentId" />
+		<result column="FacID" jdbcType="INTEGER" property="facultyId" />
+	  	<result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	  	<result column="FName" jdbcType="VARCHAR" property="studentFirstName" />
+	  	<result column="LName" jdbcType="VARCHAR" property="studentLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		student
+		VALUES
+		(#{student.studentId},#{student.studentType},#{student.studentProgram},#{student.academicYear},
+		 #{student.creditsCompleted},#{student.studentStatus},#{student.departmentId},#{student.facultyId},0)
+	</insert>
+
+	<update id="update">
+		UPDATE student SET
+		StudentType=#{student.studentType},StudentProgram=#{student.studentProgram},AcademicYear=#{student.academicYear},
+		CreditsCompleted=#{student.creditsCompleted},StudentStatus=#{student.studentStatus},DID=#{student.departmentId},FacID=#{student.facultyId}
+		WHERE StuID=#{student.studentId}
+	</update>
+
+	<delete id="delete">
+		UPDATE student SET DelFlg = 1 WHERE StuID=#{id}
+	</delete>
+
+	<select id="findStudent" resultType="edu.chalkboarduni.uniregistrationsystem.model.Student" resultMap="BaseResultMap">
+		SELECT s.StuID, s.StudentType, s.StudentProgram, s.AcademicYear, s.CreditsCompleted, s.StudentStatus,
+		s.DID, d.DepartmentName, u.FName, u.LName, s.FacID FROM student s, department d, user u
+		<where>
+			s.DID = d.DID AND s.StuID = u.UID
+			<if test="student.studentId!=null">
+				AND s.StuID = #{student.studentId}
+			</if>
+			<if test="student.studentType!=null">
+				AND s.StudentType LIKE '%' #{student.studentType} '%'
+			</if>
+			<if test="student.studentProgram!=null">
+				AND s.StudentProgram LIKE '%' #{student.studentProgram} '%'
+			</if>
+			<if test="student.academicYear!=null">
+				AND s.AcademicYear LIKE '%' #{student.academicYear} '%'
+			</if>
+			<if test="student.creditsCompleted!=null">
+				AND s.CreditsCompleted = #{student.creditsCompleted} 
+			</if>
+			<if test="student.studentStatus!=null">
+				AND s.StudentStatus LIKE '%' #{student.studentStatus} '%'
+			</if>
+			<if test="student.studentFirstName!=null">
+				AND u.FName LIKE '%' #{student.studentFirstName} '%'
+			</if>
+			<if test="student.studentLastName!=null">
+				AND u.LName LIKE '%' #{student.studentLastName} '%'
+			</if>
+			<if test="student.departmentId!=null">
+				AND s.DID = #{student.departmentId}
+			</if>
+			<if test="student.facultyId!=null">
+				AND s.FacID = #{student.facultyId}
+			</if>
+			<if test="student.departmentName!=null">
+				AND d.DepartmentName LIKE '%' #{student.departmentName} '%'
+			</if>
+			AND s.DelFlg = 0 AND u.DelFlg = 0
+			ORDER BY s.StuID
+		</where>
+	</select>
+</mapper>

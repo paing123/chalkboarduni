@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" /> <!-- customer_name in sql= customerName in java -->
+	</settings>
+	<mappers>
+		<mapper resource="mapper/DepartmentMapper.xml" />
+		<mapper resource="mapper/CourseMapper.xml" />
+		<mapper resource="mapper/BuildingMapper.xml" />
+		<mapper resource="mapper/RoomMapper.xml" />
+		<mapper resource="mapper/TimeSlotMapper.xml" />
+		<mapper resource="mapper/PrerequisitesMapper.xml" />
+		<mapper resource="mapper/HoldMapper.xml" />
+		<mapper resource="mapper/MajorMapper.xml" />
+		<mapper resource="mapper/MinorMapper.xml" />
+		<mapper resource="mapper/MajorRequirementMapper.xml" />
+		<mapper resource="mapper/MinorRequirementMapper.xml" />
+		<mapper resource="mapper/UserMapper.xml" />
+		<mapper resource="mapper/LoginMapper.xml" />
+		<mapper resource="mapper/FacultyMapper.xml" />
+		<mapper resource="mapper/FacultyMapper.xml" />
+		<mapper resource="mapper/FacultyDepartmentMapper.xml" />
+		<mapper resource="mapper/CourseSectionMapper.xml" />
+		<mapper resource="mapper/StudentMapper.xml" />
+		<mapper resource="mapper/StudentHistoryMapper.xml" />
+		<mapper resource="mapper/FacultyHistoryMapper.xml" />
+		<mapper resource="mapper/StudentHoldMapper.xml" />
+		<mapper resource="mapper/AdvisingMapper.xml" />
+		<mapper resource="mapper/EnrollmentMapper.xml" />
+		<mapper resource="mapper/AttendanceMapper.xml" />
+		<mapper resource="mapper/StudentMajorMapper.xml" />
+		<mapper resource="mapper/StudentMinorMapper.xml" />
+	</mappers>
+</configuration>

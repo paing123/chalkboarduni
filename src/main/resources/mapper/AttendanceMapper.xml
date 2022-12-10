@@ -1,0 +1,76 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.AttendanceMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Attendance">
+	  <result column="FacID" jdbcType="INTEGER" property="facultyId" />  
+	  <result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  <result column="CRN" jdbcType="INTEGER" property="courseSectionId" />
+	  <result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		attendance
+		VALUES
+		(#{attendance.studentId},#{attendance.courseSectionId},#{attendance.date},#{attendance.absentPresent})
+	</insert>
+
+	<update id="update">
+		UPDATE attendance SET
+		AbsentPresent=#{attendance.absentPresent}
+		WHERE StuID=#{attendance.studentId} AND CRN=#{attendance.courseSectionId} AND Date=#{attendance.date}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM attendance WHERE StuID=#{attendance.studentId} AND CRN=#{attendance.courseSectionId} AND Date=#{attendance.date}
+	</delete>
+
+	<select id="findAttendance" resultType="edu.chalkboarduni.uniregistrationsystem.model.Attendance" resultMap="BaseResultMap">
+		SELECT s.StuID, (SELECT us.FName FROM user us  where us.UID = a.StuID) AS StudentFirstName, (SELECT us.LName FROM user us  where us.UID = a.StuID) AS StudentLastName, 
+		f.FacID, u.FName, u.LName, c.CourseID, c.CourseName, a.CRN, cs.SemesterYear, a.Date, a.AbsentPresent
+		FROM attendance a, student s, faculty f, user u, coursesection cs, course c
+		<where>
+			a.StuID = s.StuID AND a.CRN = cs.CRN AND cs.CourseID = c.CourseID AND cs.FacID = f.FacID AND f.FacID = u.UID
+			<if test="attendance.studentId!=null">
+				AND s.StuID = #{attendance.studentId}
+			</if>
+			<if test="attendance.studentFirstName!=null">
+				AND (SELECT us.FName FROM user us  where us.UID = a.StuID) LIKE '%' #{attendance.studentFirstName} '%'
+			</if>
+			<if test="attendance.studentLastName!=null">
+				AND (SELECT us.LName FROM user us  where us.UID = a.StuID) LIKE '%' #{attendance.studentLastName} '%'
+			</if>
+			<if test="attendance.facultyId!=null">
+				AND cs.FacID = #{attendance.facultyId}
+			</if>
+			<if test="attendance.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{attendance.facultyFirstName} '%'
+			</if>
+			<if test="attendance.facultyLastName!=null">
+				AND u.LName LIKE '%' #{attendance.facultyLastName} '%'
+			</if>
+			<if test="attendance.courseId!=null">
+				AND c.CourseID = #{attendance.courseId}
+			</if>
+			<if test="attendance.courseName!=null">
+				AND c.CourseName LIKE '%' #{attendance.courseName} '%'
+			</if>
+			<if test="attendance.courseSectionId!=null">
+				AND a.CRN = #{attendance.courseSectionId}
+			</if>
+			<if test="attendance.semesterYear!=null">
+				AND cs.SemesterYear = #{attendance.semesterYear}
+			</if>
+			<if test="attendance.date!=null">
+				AND a.Date = #{attendance.date}
+			</if>
+			<if test="attendance.absentPresent!=null">
+				AND a.AbsentPresent = #{attendance.absentPresent}
+			</if>
+		</where>
+	</select>
+</mapper>

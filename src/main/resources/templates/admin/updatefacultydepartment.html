@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Update Faculty Department</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+</head>
+<body>
+<div th:replace="fragments/adminheader :: header"></div>
+<form th:action="@{/admin/updatefacultydepartment}" th:object="${model}" method="POST">
+	<div align="center">
+		<h2>Update Faculty</h2>
+		<table>
+			<tr>
+				<td>Faculty</td>
+				<td>
+					<select th:field="*{facultyId}" style="width: 100%" disabled="disabled">
+						<option th:each="facultyUser : ${model.facultyList}" th:value="${facultyUser.facultyId}" th:text="${facultyUser.facultyFirstName+ ' ' +facultyUser.facultyLastName}"></option>
+					</select>
+					<input type="hidden" th:field="*{facultyId}">
+					<div th:if="${#fields.hasErrors('facultyId')}"  th:errors="*{facultyId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Department</td>
+				<td>
+					<select th:field="*{departmentId}" style="width: 100%" disabled="disabled">
+						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+					</select>
+					<input type="hidden" th:field="*{departmentId}">
+					<div th:if="${#fields.hasErrors('departmentId')}"  th:errors="*{departmentId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Percent Time</td>
+				<td><input type="number" th:field="*{percentTime}" onkeypress="if(this.value.length == 9) return false;">
+					<div th:if="${#fields.hasErrors('percentTime')}"  th:errors="*{percentTime}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Date Of Appointment</td>
+				<td><input type="date" th:field="*{dateOfAppointment}" style="width: 97%">
+					<div th:if="${#fields.hasErrors('dateOfAppointment')}"  th:errors="*{dateOfAppointment}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

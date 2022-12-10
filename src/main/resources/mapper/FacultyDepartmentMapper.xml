@@ -1,0 +1,58 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.FacultyDepartmentMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.FacultyDepartment">
+	  <result column="FacID" jdbcType="INTEGER" property="facultyId" />
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	  <result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		facultydepartment
+		VALUES
+		(#{facultyDepartment.facultyId},#{facultyDepartment.departmentId},#{facultyDepartment.percentTime},#{facultyDepartment.dateOfAppointment})
+	</insert>
+
+	<update id="update">
+		UPDATE facultydepartment SET
+		PercentTime=#{facultyDepartment.percentTime},DateOfAppointment=#{facultyDepartment.dateOfAppointment}
+		WHERE FacID=#{facultyDepartment.facultyId} AND DID=#{facultyDepartment.departmentId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM facultydepartment WHERE FacID=#{facultyId} AND DID= #{departmentId}
+	</delete>
+
+	<select id="findFacultyDepartment" resultType="edu.chalkboarduni.uniregistrationsystem.model.FacultyDepartment" resultMap="BaseResultMap">
+		SELECT fd.FacID, fd.DID, fd.PercentTime, fd.DateOfAppointment, d.DepartmentName, u.FName, u.LName FROM facultydepartment fd, department d, faculty f, user u
+		<where>
+			fd.FacID = f.FacID AND fd.DID = d.DID AND f.FacID = u.UID
+			<if test="facultyDepartment.facultyId!=null">
+				AND fd.FacID = #{facultyDepartment.facultyId}
+			</if>
+			<if test="facultyDepartment.departmentId!=null">
+				AND fd.DID = #{facultyDepartment.departmentId}
+			</if>
+			<if test="facultyDepartment.percentTime!=null">
+				AND fd.PercentTime = #{facultyDepartment.percentTime}
+			</if>
+			<if test="facultyDepartment.dateOfAppointment!=null">
+				AND fd.DateOfAppointment = CAST(#{facultyDepartment.dateOfAppointment} AS DATE)
+			</if>
+			<if test="facultyDepartment.departmentName!=null">
+				AND d.DepartmentName LIKE '%' #{facultyDepartment.departmentName} '%'
+			</if>
+			<if test="facultyDepartment.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{facultyDepartment.facultyFirstName} '%'
+			</if>
+			<if test="facultyDepartment.facultyLastName!=null">
+				AND u.LName LIKE '%' #{facultyDepartment.facultyLastName} '%'
+			</if>
+		</where>
+	</select>
+</mapper>

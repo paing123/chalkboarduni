@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>MinorRequirement Detail List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	function findMinorRequirement(minorId, minorName){
+		document.getElementById("minorId").value = minorId;
+		document.getElementById("minorName").value = minorName;
+		document.forms.frmMinorRequirementList.action = "minorrequirementdetail";
+		document.forms.frmMinorRequirementList.submit();
+	}
+	
+	function deleteMinorRequirement(minorId, minorName, courseId){
+		document.getElementById("minorId").value = minorId;
+		document.getElementById("minorName").value = minorName;
+		document.getElementById("courseId").value = courseId;
+		document.forms.frmMinorRequirementList.action = "deleteminorrequirement";
+		document.forms.frmMinorRequirementList.submit();
+	}
+	
+	function backToMinors(){
+		document.getElementById("minorId").value = "";
+		document.getElementById("minorName").value = "";
+		document.getElementById("courseId").value = courseId;
+		document.forms.frmMinorRequirementList.action = "searchminors";
+		document.forms.frmMinorRequirementList.submit();
+	}
+	
+</script>
+</head>
+<body>
+<form id="frmMinorRequirementList" th:object="${model}" th:action="@{/admin/registerminorrequirement}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Register Minor Requirement</h2>
+		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
+		<table>
+			<tr>
+				<td>Minor Name</td>
+				<td>
+					<input type="hidden" th:field="*{minorId}" id="minorId"/>
+					<input type="hidden" th:field="*{minorName}" id="minorName"/>
+					<label th:text="${model.minorName}"></label>
+					<div th:if="${#fields.hasErrors('minorId')}"  th:errors="*{minorId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td>
+					<select th:field="*{courseId}" id="courseId" style="width: 100%">
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+					</select>
+					<div th:if="${#fields.hasErrors('courseId')}"  th:errors="*{courseId}" th:style="${'color:red'}"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="button" th:onclick="backToMinors()">Back</button><button type="submit">Add</button></td>
+			</tr>
+		</table>
+		<br><br>
+		<h2>Minor Requirement List</h2>
+		<table>
+			<tr>
+				<th>Minor Name</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+				<th>Action</th>
+			</tr>
+			<tr th:each="minorrequirement : ${model.minorRequirementList}">
+				<td th:utext="${minorrequirement.minorName}"></td>
+				<td th:utext="${minorrequirement.courseId}"></td>
+				<td th:utext="${minorrequirement.courseName}"></td>
+				<td>
+					<button type="button" th:onclick="deleteMinorRequirement([[${minorrequirement.minorId}]],[[${minorrequirement.minorName}]],[[${minorrequirement.courseId}]])">Delete</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

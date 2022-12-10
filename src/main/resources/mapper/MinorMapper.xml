@@ -1,0 +1,47 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.MinorMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Minor">
+	  <result column="DID" jdbcType="VARCHAR" property="departmentId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		minor
+		VALUES
+		(#{minor.minorId},#{minor.departmentId},#{minor.minorName},#{minor.requiredCredits},0)
+	</insert>
+
+	<update id="update">
+		UPDATE minor SET
+		DID=#{minor.departmentId},MinorName=#{minor.minorName},RequiredCredits=#{minor.requiredCredits}
+		WHERE MinorID=#{minor.minorId}
+	</update>
+
+	<delete id="delete">
+		UPDATE minor SET DelFlg = 1 WHERE MinorID=#{id}
+	</delete>
+
+	<select id="findMinor" resultType="edu.chalkboarduni.uniregistrationsystem.model.Minor" resultMap="BaseResultMap">
+		SELECT m.MinorID,m.DID,d.DepartmentName,m.MinorName,m.RequiredCredits FROM minor m, department d
+		<where>
+			m.DID = d.DID
+			<if test="minor.minorId!=null">
+				AND m.MinorID = #{minor.minorId}
+			</if>
+			<if test="minor.departmentId!=null">
+				AND m.DID = #{minor.departmentId}
+			</if>
+			<if test="minor.minorName!=null">
+				AND m.MinorName LIKE '%' #{minor.minorName} '%'
+			</if>
+			<if test="minor.requiredCredits!=null">
+				AND m.RequiredCredits = #{minor.requiredCredits}
+			</if>
+			AND m.DelFlg = 0
+		</where>
+	</select>
+</mapper>

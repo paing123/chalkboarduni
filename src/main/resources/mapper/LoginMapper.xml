@@ -1,0 +1,40 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.LoginMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Login">
+	  <result column="UID" jdbcType="INTEGER" property="userId" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		login
+		VALUES
+		(#{login.userId},#{login.email},#{login.password},0)
+	</insert>
+
+	<update id="update">
+		UPDATE login SET
+		Email=#{login.email},Password=#{login.password}
+		WHERE UID=#{login.userId}
+	</update>
+
+	<delete id="delete">
+		UPDATE login SET DelFlg = 1 WHERE UID=#{id} 
+	</delete>
+
+	<select id="findLogin" resultType="edu.chalkboarduni.uniregistrationsystem.model.Login" resultMap="BaseResultMap">
+		SELECT * FROM login
+		<where>
+			<if test="login.userId!=null">
+				AND UID = #{login.userId}
+			</if>
+			<if test="login.email!=null">
+				AND Email LIKE '%' #{login.email} '%'
+			</if>
+			AND DelFlg = 0
+		</where>
+	</select>
+</mapper>

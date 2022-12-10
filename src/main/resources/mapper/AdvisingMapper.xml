@@ -1,0 +1,64 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.chalkboarduni.uniregistrationsystem.mapper.AdvisingMapper">
+	
+	<resultMap id="BaseResultMap" type="edu.chalkboarduni.uniregistrationsystem.model.Advising">
+	  <result column="FacID" jdbcType="INTEGER" property="facultyId" />  
+	  <result column="StuID" jdbcType="INTEGER" property="studentId" />
+	  <result column="FName" jdbcType="VARCHAR" property="facultyFirstName" />
+	  <result column="LName" jdbcType="VARCHAR" property="facultyLastName" />
+	</resultMap>
+
+	<insert id="save"> <!-- id and method name must be same -->
+		INSERT INTO
+		advising(StuID,FacID,AdvisingDate)
+		VALUES
+		(#{advising.studentId},#{advising.facultyId},#{advising.advisingDate})
+	</insert>
+
+	<update id="update">
+		UPDATE advising SET
+		StuID=#{advising.studentId},FacID=#{advising.facultyId},AdvisingDate=#{advising.advisingDate}
+		WHERE AppointmentID=#{advising.appointmentId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM advising WHERE AppointmentID=#{id} 
+	</delete>
+
+	<select id="findAdvising" resultType="edu.chalkboarduni.uniregistrationsystem.model.Advising" resultMap="BaseResultMap">
+		SELECT a.AppointmentId, f.FacID, u.FName, u.LName, s.StuID, (SELECT us.FName FROM user us  where us.UID = a.StuID) AS StudentFirstName, 
+		(SELECT us.LName FROM user us  where us.UID = a.StuID) AS StudentLastName, a.AdvisingDate
+		FROM advising a, student s, faculty f, user u 
+		<where>
+			a.StuID = s.StuID AND a.FacID = f.FacID AND f.FacID = u.UID
+			<if test="advising.appointmentId!=null">
+				AND a.AppointmentId = #{advising.appointmentId}
+			</if>
+			<if test="advising.facultyId!=null">
+				AND a.FacID = #{advising.facultyId}
+			</if>
+			<if test="advising.facultyFirstName!=null">
+				AND u.FName LIKE '%' #{advising.facultyFirstName} '%'
+			</if>
+			<if test="advising.facultyLastName!=null">
+				AND u.LName LIKE '%' #{advising.facultyLastName} '%'
+			</if>
+			<if test="advising.studentId!=null">
+				AND a.StuID = #{advising.studentId}
+			</if>
+			<if test="advising.studentFirstName!=null">
+				AND (SELECT us.FName FROM user us  where us.UID = a.StuID) LIKE '%' #{advising.studentFirstName} '%'
+			</if>
+			<if test="advising.studentLastName!=null">
+				AND (SELECT us.LName FROM user us  where us.UID = a.StuID) LIKE '%' #{advising.studentLastName} '%'
+			</if>
+			<if test="advising.advisingDate!=null">
+				AND a.AdvisingDate = #{advising.advisingDate}
+			</if>
+			GROUP BY a.AppointmentID
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Major Requirement List</title>
+<style type="text/css">
+	table tr td, th{
+		border: solid 1px black;
+	}
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<form id="frmMajorRequirement" th:object="${model}" th:action="@{/admin/majorrequirements}" method="post">
+<div th:replace="fragments/adminheader :: header"></div>
+	<div align="center">
+		<div th:if="${model.successMessage == 'registered'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'updated'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
+		</div>
+		<div th:if="${model.successMessage == 'deleted'}">
+				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
+		</div>
+		<h2>Search Major Requirement</h2>
+		<table>
+			<tr>
+				<td>Major Id</td>
+				<td>
+					<select th:field="*{majorId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="major : ${model.majorList}" th:value="${major.majorId}" th:text="${major.majorId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Major Name</td>
+				<td><input type="text" th:field="*{majorName}"></td>
+			</tr>
+			<tr>
+				<td>Course Id</td>
+				<td>
+					<select th:field="*{courseId}" style="width: 100%">
+						<option th:value="NULL" th:text="NULL"></option>
+						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseId}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Course Name</td>
+				<td><input type="text" th:field="*{courseName}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="submit">Search</button></td>
+			</tr>
+		</table>
+		<br>
+		<h2>Major Requirement List</h2>
+		<table>
+			<tr>
+				<th>Major Id</th>
+				<th>Major Name</th>
+				<th>Course Id</th>
+				<th>Course Name</th>
+			</tr>
+			<tr th:each="majorRequirement : ${model.majorRequirementList}">
+				<td th:utext="${majorRequirement.majorId}"></td>
+				<td th:utext="${majorRequirement.majorName}"></td>
+				<td th:utext="${majorRequirement.courseId}"></td>
+				<td th:utext="${majorRequirement.courseName}"></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>
