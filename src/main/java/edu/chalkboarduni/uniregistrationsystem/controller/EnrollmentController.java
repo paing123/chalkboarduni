@@ -28,6 +28,7 @@ import edu.chalkboarduni.uniregistrationsystem.service.StudentService;
 import edu.chalkboarduni.uniregistrationsystem.util.DateTimeFormatter;
 
 @Controller
+@RequestMapping("admin")
 public class EnrollmentController {
 
 	@Autowired
@@ -54,6 +55,18 @@ public class EnrollmentController {
 	
 	@RequestMapping(value = {"enrollments"})
 	public String getEnrollmentList(Enrollment enrollment) {
+		List<Student> studentList = studentService.findStudent(new Student());
+		List<Course> courseList = courseService.findCourse(new Course());
+		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
+		
+		enrollment.setStudentList(studentList);
+		enrollment.setCourseList(courseList);
+		enrollment.setCourseSectionList(courseSectionList);
+		return "admin/enrollments";
+	}
+	
+	@RequestMapping(value = {"searchenrollments"})
+	public String searchEnrollmentList(Enrollment enrollment) {
 		List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
 		List<Student> studentList = studentService.findStudent(new Student());
 		List<Course> courseList = courseService.findCourse(new Course());
@@ -71,40 +84,40 @@ public class EnrollmentController {
 		return "admin/enrollments";
 	}
 	
-	@GetMapping(value = {"registerenrollment"})
-	public String getEnrollmentForm(Enrollment enrollment,Model model) {
-		enrollment = new Enrollment();
-		List<Student> studentList = studentService.findStudent(new Student());
-		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
-		enrollment.setStudentList(studentList);
-		enrollment.setCourseSectionList(courseSectionList);
-		model.addAttribute("model",enrollment);
-		return "admin/registerenrollment";
-	}
-	
-	@PostMapping(value = {"registerenrollment"})
-	public String registerEnrollment(@Valid @ModelAttribute("model") Enrollment enrollment,BindingResult bindingResult) {
-		
-		if (bindingResult.hasErrors()) {
-			List<Student> studentList = studentService.findStudent(new Student());
-			List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
-			enrollment.setStudentList(studentList);
-			enrollment.setCourseSectionList(courseSectionList);
-			return "admin/registerenrollment";
-		}
-		
-		try {
-			enrollmentService.save(enrollment);
-			return "redirect:/enrollments";
-		} catch (Exception e) {
-			List<Student> studentList = studentService.findStudent(new Student());
-			List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
-			enrollment.setStudentList(studentList);
-			enrollment.setCourseSectionList(courseSectionList);
-			enrollment.setErrorMessage("Duplication Error! Please check Student and CourseSection.");
-			return "admin/registerenrollment";
-		}
-	}
+//	@GetMapping(value = {"registerenrollment"})
+//	public String getEnrollmentForm(Enrollment enrollment,Model model) {
+//		enrollment = new Enrollment();
+//		List<Student> studentList = studentService.findStudent(new Student());
+//		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
+//		enrollment.setStudentList(studentList);
+//		enrollment.setCourseSectionList(courseSectionList);
+//		model.addAttribute("model",enrollment);
+//		return "admin/registerenrollment";
+//	}
+//	
+//	@PostMapping(value = {"registerenrollment"})
+//	public String registerEnrollment(@Valid @ModelAttribute("model") Enrollment enrollment,BindingResult bindingResult) {
+//		
+//		if (bindingResult.hasErrors()) {
+//			List<Student> studentList = studentService.findStudent(new Student());
+//			List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
+//			enrollment.setStudentList(studentList);
+//			enrollment.setCourseSectionList(courseSectionList);
+//			return "admin/registerenrollment";
+//		}
+//		
+//		try {
+//			enrollmentService.save(enrollment);
+//			return "redirect:/enrollments";
+//		} catch (Exception e) {
+//			List<Student> studentList = studentService.findStudent(new Student());
+//			List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
+//			enrollment.setStudentList(studentList);
+//			enrollment.setCourseSectionList(courseSectionList);
+//			enrollment.setErrorMessage("Duplication Error! Please check Student and CourseSection.");
+//			return "admin/registerenrollment";
+//		}
+//	}
 		
 	@RequestMapping("deleteenrollment")
 	public String deleteEnrollment(Enrollment enrollment) {

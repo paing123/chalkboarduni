@@ -111,17 +111,14 @@ public class StudentHistoryController {
 		}
 	}
 	
-	@GetMapping("updatestudenthistory/{studentid}/{coursesectionid}")
-	public String getExistStudentHistory(@PathVariable("studentid") Integer studentId,@PathVariable("coursesectionid") Integer courseSectionId,Model model) {
-		StudentHistory existStudentHistory = new StudentHistory();
+	@PostMapping("updatestudenthistoryform")
+	public String getExistStudentHistory(StudentHistory studentHistory, Model model) {
 		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
 		List<Student> studentList = studentService.findStudent(new Student());
-		existStudentHistory.setStudentId(studentId);
-		existStudentHistory.setCourseSectionId(courseSectionId);
-		existStudentHistory = studentHistoryService.findStudentHistory(existStudentHistory).get(0);
-		existStudentHistory.setCourseSectionList(courseSectionList);
-		existStudentHistory.setStudentList(studentList);
-		model.addAttribute("model",existStudentHistory);
+		studentHistory = studentHistoryService.findStudentHistory(studentHistory).get(0);
+		studentHistory.setCourseSectionList(courseSectionList);
+		studentHistory.setStudentList(studentList);
+		model.addAttribute("model", studentHistory);
 		return "admin/updatestudenthistory";
 	}
 	

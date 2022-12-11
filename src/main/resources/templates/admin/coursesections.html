@@ -30,7 +30,7 @@
 		<div th:if="${model.successMessage == 'deleted'}">
 				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
 		</div>
-		<h2>Search Course Section</h2>
+		<h2>Search Degree Audit</h2>
 		<table>
 			<tr>
 				<td>CRN</td>
@@ -118,7 +118,7 @@
 		</table>
 		<br><br>
 		<h2>Course Section List</h2>
-		<a th:href="@{registercoursesection}">Add Course Section</a>
+		<a th:href="@{registercoursesection}">Add Degree Audit</a>
 		<br><br>
 		<div th:if="${not #lists.isEmpty(model.courseSectionList)}">
 		<table>

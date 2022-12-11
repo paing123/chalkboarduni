@@ -67,7 +67,7 @@
         <div class="container">
         	 <form th:action="@{/admin/updateuser}" th:object="${model}" method="POST">
 				<div align="center">
-					<h2>Register New User</h2>
+					<h2>Update User</h2>
 				</div>
 				<div th:if="${model.errorMessage}">
 					<div class="alert alert-danger" style="text-align: center; font-size: 20px"><h4 th:utext="*{errorMessage}"></h4></div>

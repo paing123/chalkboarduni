@@ -127,9 +127,10 @@ public class StudentEnrollmentController {
 		enrollCourseSection.setDepartmentList(departmentList);
 		enrollCourseSection.setCourseSectionId(courseSectionId);
 		enrollCourseSection = courseSectionService.findCourseSection(enrollCourseSection).get(0);
+		
 		this.refreshCourseSection(enrollCourseSection);	
 	
-		String cuurentSemesterYear = enrollCourseSection.getSemesterYear();
+		String currentSemesterYear = "Fall2022";
 		
 		//check student hold
 		StudentHold studentHold = new StudentHold();
@@ -174,7 +175,7 @@ public class StudentEnrollmentController {
 		
 		//check timeslot from enrollment
 		Enrollment enrollmentTimeSlot = new Enrollment();
-		enrollmentTimeSlot.setSemesterYear(cuurentSemesterYear);
+		enrollmentTimeSlot.setSemesterYear(currentSemesterYear);
 		List<Enrollment> enrollments = enrollmentService.findEnrollment(enrollmentTimeSlot);
 		for (Enrollment enroll : enrollments) {
 			if(enroll.getTimeSlotId().equals(enrollCourseSection.getTimeSlotId())) {
@@ -243,10 +244,8 @@ public class StudentEnrollmentController {
 	}
 	
 	private int generateGradeIntValue(String grade) {
+		
 		if(grade.equalsIgnoreCase("a+")) {
-			return 14;
-		}
-		else if(grade.equalsIgnoreCase("a+")) {
 			return 13;
 		}
 		else if(grade.equalsIgnoreCase("a")) {
@@ -310,6 +309,7 @@ public class StudentEnrollmentController {
 		}
 		courseSection.setCourseSectionList(courseSectionList);
 	}
+	
 	
 	private void checkTimeWindow(List<CourseSection> courseSections) {
 		SimpleDateFormat dateFormater = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");

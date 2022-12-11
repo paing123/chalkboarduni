@@ -14,7 +14,9 @@
 	            <a href="#" class="small mr-3"><span class="icon-envelope-o mr-2"></span> chalkboard@cu.edu</a> 
 	          </div>
 	          <div class="col-lg-3 text-right">
-	            <a th:href="@{/login}" class="small mr-3"><span class="icon-unlock-alt"></span> Log In</a>
+	            <form th:action="@{/logout}" method="POST">
+					<input class="small btn btn-primary px-4 py-2 rounded-0" type="submit" value="Logout" />
+				</form>
 	          </div>
 	        </div>
 	      </div>
@@ -40,9 +42,9 @@
 		                    <li><a th:href="@{/admin/studentholds}">Student Hold</a></li>
 		                    <li><a th:href="@{/admin/studentmajors}">Student Major</a></li>
 		                    <li><a th:href="@{/admin/studentminors}">Student Minor</a></li>
-		                    <li><a th:href="@{/admin/attendances}">Attendances</a></li>
-		                    <li><a th:href="@{/admin/enrollments}">Enrollments</a></li>
-		                    <li><a th:href="@{/admin/advisings}">Appointments</a></li>
+		                    <li><a th:href="@{/admin/attendances}">Student Attendances</a></li>
+		                    <li><a th:href="@{/admin/enrollments}">Degree Audit</a></li>
+		                    <li><a th:href="@{/admin/advisings}">Student Appointments</a></li>
 		                  </ul>
 		                </li>
 		                <li class="has-children">

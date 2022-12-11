@@ -42,7 +42,7 @@ public class StudentController {
 	private void InitBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
-	
+		
 	@ModelAttribute
     public void initModel(Student student, Model model) {
         model.addAttribute("model", student);
@@ -59,6 +59,7 @@ public class StudentController {
 		return "admin/students";
 	}
 	
+	//@requestmapping can accept both post and get method
 	@RequestMapping(value = {"searchstudents"})
 	public String searchStudentList(Student student) {
 		List<Student> studentList = studentService.findStudent(student);
@@ -131,6 +132,7 @@ public class StudentController {
 	@PostMapping("updatestudent")
 	public String updateStudent(@Valid @ModelAttribute("model") Student student,BindingResult bindingResult) {
 		
+		//check field value has error or not
 		if (bindingResult.hasErrors()) {
 			List<Department> departmentList = departmentService.findDepartment(new Department());
 			List<UserDto> userList = studentService.getStudentUserList();
