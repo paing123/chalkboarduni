@@ -1,53 +1,140 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Update Prerequisites</title>
-<style type="text/css">
-	table tr td, th{
-		border: solid 1px black;
-	}
-</style>
+  <title>Academics &mdash; Website by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="../../fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/jquery-ui.css">
+  <link rel="stylesheet" href="../../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
+
+  <link rel="stylesheet" href="../../css/jquery.fancybox.min.css">
+
+  <link rel="stylesheet" href="../../css/bootstrap-datepicker.css">
+
+  <link rel="stylesheet" href="../../fonts/flaticon/font/flaticon.css">
+
+  <link rel="stylesheet" href="../../css/aos.css">
+  <link href="../../css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
 </head>
-<body>
-<div th:replace="fragments/adminheader :: header"></div>
-<form th:action="@{/admin/updateprerequisites}" th:object="${model}" method="POST">
-	<div align="center">
-		<h2>Update Prerequisites</h2>
-		<label th:utext="*{errorMessage}" th:style="${'color:red'}"></label>
-		<table>
-			<tr>
-				<td>PrerequisitesId</td>
-				<td><input type="text" th:field="*{prereqId}" readonly="readonly"></td>
-			</tr>
-			<tr>
-				<td>Required Course Name</td>
-				<td>
-					<select th:field="*{requiredCourseId}" style="width: 100%">
-						<option th:value="NULL" th:text="NULL"></option>
-						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
-					</select>
-					<div th:if="${#fields.hasErrors('requiredCourseId')}"  th:errors="*{requiredCourseId}" th:style="${'color:red'}"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>Main Course Name</td>
-				<td>
-					<select th:field="*{courseId}" style="width: 100%">
-						<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
-					</select>
-					<div th:if="${#fields.hasErrors('courseId')}"  th:errors="*{courseId}" th:style="${'color:red'}"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>Min Grade</td>
-				<td><input type="text" th:field="*{minGrade}" maxlength="2"></td>
-			</tr>
-			<tr>
-				<td colspan="2"><button type="submit">Update</button></td>
-			</tr>
-		</table>
-	</div>
-</form>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+	<div th:replace="fragments/adminheader :: header"></div>
+    
+    <div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('../../images/bg_1.jpg')">
+        <div class="container">
+          <div class="row align-items-end justify-content-center text-center">
+            <div class="col-lg-7">
+              <h2 class="mb-0">Prerequisite Update</h2>
+              <p>All these are prerequisite update.</p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    <div class="custom-breadcrumns border-bottom">
+      <div class="container">
+        <a th:href="@{/admin/adminhome}">Home</a>
+        <span class="mx-3 icon-keyboard_arrow_right"></span>
+        <span class="current">Prerequisite Update</span>
+      </div>
+    </div>
+    <div style="padding: 2.5em;">
+        <div class="container">
+        	 <form th:action="@{/admin/updateprerequisites}" th:object="${model}" method="POST">
+				<div align="center">
+					<h2>Update Prerequisite</h2>
+				</div>
+				<div th:if="${model.errorMessage}">
+					<div class="alert alert-danger" style="text-align: center; font-size: 20px"><h4 th:utext="*{errorMessage}"></h4></div>
+				</div>
+				<br>
+				<table class="table table-hover">
+					<tr>
+						<td>PrerequisitesId</td>
+						<td><input type="text" th:field="*{prereqId}" class="form-control" readonly="readonly"></td>
+					</tr>
+					<tr>
+						<td>Required Course Name</td>
+						<td>
+							<select th:field="*{requiredCourseId}" class="form-control form-select">
+								<option th:value="NULL" th:text="NULL"></option>
+								<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+							</select>
+							<div th:if="${#fields.hasErrors('requiredCourseId')}"  th:errors="*{requiredCourseId}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Main Course Name</td>
+						<td>
+							<select th:field="*{courseId}" class="form-control form-select">
+								<option th:each="course : ${model.courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+							</select>
+							<div th:if="${#fields.hasErrors('courseId')}"  th:errors="*{courseId}" th:style="${'color:red'}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>Min Grade</td>
+						<td><input type="text" th:field="*{minGrade}" class="form-control" maxlength="2"></td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<a th:href="@{/admin/prerequisitess}" class="btn btn-secondary">Back</a>
+							<button type="submit" class="btn btn-info">Update</button>
+						</td>
+					</tr>
+				</table>
+			 </form>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+    
+
+  </div>
+  <!-- .site-wrap -->
+
+  <!-- loader -->
+  <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
+
+  <script src="../../js/jquery-3.3.1.min.js"></script>
+  <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../../js/jquery-ui.js"></script>
+  <script src="../../js/popper.min.js"></script>
+  <script src="../../js/bootstrap.min.js"></script>
+  <script src="../../js/owl.carousel.min.js"></script>
+  <script src="../../js/jquery.stellar.min.js"></script>
+  <script src="../../js/jquery.countdown.min.js"></script>
+  <script src="../../js/bootstrap-datepicker.min.js"></script>
+  <script src="../../js/jquery.easing.1.3.js"></script>
+  <script src="../../js/aos.js"></script>
+  <script src="../../js/jquery.fancybox.min.js"></script>
+  <script src="../../js/jquery.sticky.js"></script>
+  <script src="../../js/jquery.mb.YTPlayer.min.js"></script>
+
+  <script src="../../js/main.js"></script>
+
 </body>
+
 </html>

@@ -1,13 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Major List</title>
-<style type="text/css">
-	table tr td, th{
-		border: solid 1px black;
-	}
-</style>
+  <title>Academics &mdash; Website by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="../fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+
+  <link rel="stylesheet" href="../css/jquery.fancybox.min.css">
+
+  <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+
+  <link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css">
+
+  <link rel="stylesheet" href="../css/aos.css">
+  <link href="../css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="../css/style.css">
+
 <script>
 	
 	function findMajorRequirement(majorId, majorName){
@@ -18,80 +37,148 @@
 	}
 	
 </script>
+
 </head>
-<body>
-<div th:replace="fragments/adminheader :: header"></div>
-<form id="frmMajor" th:object="${model}"  method="post" th:action="@{searchmajors}">
-	<div align="center">
-		<div th:if="${model.successMessage == 'registered'}">
-				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been registered successfully.</h3></div>
-		</div>
-		<div th:if="${model.successMessage == 'updated'}">
-				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been updated successfully.</h3></div>
-		</div>
-		<div th:if="${model.successMessage == 'deleted'}">
-				<div style="text-align: center; font-size: 20px; color: green;"><h3>Congratulation! You have been deleted successfully.</h3></div>
-		</div>
-		<h2>Search Majors</h2>
-		<table>
-			<tr>
-				<td>Major Id</td>
-				<td><input type="text" th:field="*{majorId}" id="majorId"></td>
-			</tr>
-			<tr>
-				<td>Department Name</td>
-				<td>
-					<select th:field="*{departmentId}" style="width: 100%">
-						<option th:value="NULL" th:text="NULL"></option>
-						<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>Major Name</td>
-				<td><input type="text" th:field="*{majorName}" id="majorName"></td>
-			</tr>
-			<tr>
-				<td>Major Degree</td>
-				<td><input type="text" th:field="*{majorDegree}"></td>
-			</tr>
-			<tr>
-				<td>Credits To Graduate</td>
-				<td><input type="text" th:field="*{creditsToGraduate}"></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><button type="submit">Search</button></td>
-			</tr>
-		</table>
-		<br><br>
-		<h2>Major List</h2>
-		<a th:href="@{/admin/registermajor}">Add Major</a>
-		<br><br>
-		<div th:if="${not #lists.isEmpty(model.majorList)}">
-		<table>
-			<tr>
-				<th>Major Id</th>
-				<th>Department Name</th>
-				<th>Major Name</th>
-				<th>Major Degree</th>
-				<th>Credits To Graduate</th>
-				<th>Action</th>
-			</tr>
-			<tr th:each="major : ${model.majorList}">
-				<td th:utext="${major.majorId}"></td>
-				<td th:utext="${major.departmentName}"></td>
-				<td th:utext="${major.majorName}"></td>
-				<td th:utext="${major.majorDegree}"></td>
-				<td th:utext="${major.creditsToGraduate}"></td>
-				<td>
-					<button type="button" th:onclick="findMajorRequirement([[${major.majorId}]],[[${major.majorName}]])">Requirement</button>
-					<a th:href="@{/admin/updatemajor/{id}(id=${major.majorId})}">Update</a>
-					<a th:href="@{/admin/deletemajor/{id}(id=${major.majorId})}">Delete</a>
-				</td>
-			</tr>
-		</table>
-		</div>
-	</div>
-</form>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+	
+	<div th:replace="fragments/adminheader :: header"></div>
+	 
+    <div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('../../images/bg_1.jpg')">
+        <div class="container">
+          <div class="row align-items-end justify-content-center text-center">
+            <div class="col-lg-7">
+              <h2 class="mb-0">Major</h2>
+              <p>All these are majors.</p>
+            </div>
+          </div>
+        </div>
+      </div> 
+    <div class="custom-breadcrumns border-bottom">
+      <div class="container">
+        <a th:href="@{/admin/adminhome}">Home</a>
+        <span class="mx-3 icon-keyboard_arrow_right"></span>
+        <span class="current">Majors</span>
+      </div>
+    </div>
+    <div style="padding: 2.5em;">
+        <div>
+        	 <form id="frmMajor" th:object="${model}"  method="post" th:action="@{searchmajors}">
+				<div th:if="${model.successMessage == 'registered'}">
+					<div class="alert alert-info" style="text-align: center; font-size: 20px">Congratulation! You have been registered successfully.</div>
+				</div>
+				<div th:if="${model.successMessage == 'updated'}">
+					<div class="alert alert-info" style="text-align: center; font-size: 20px">Congratulation! You have been updated successfully.</div>
+				</div>
+				<div th:if="${model.successMessage == 'deleted'}">
+					<div class="alert alert-info" style="text-align: center; font-size: 20px">Congratulation! You have been deleted successfully.</div>
+				</div>
+				
+				<div class="row">
+	                <div class="col-md-4 form-group">
+	                    <label for="fname">Major Id</label>
+	                    <input type="text" th:field="*{majorId}" id="majorId" class="form-control form-control-lg">
+	                </div>
+	                <div class="col-md-4 form-group">
+	                    <label for="fname">Major Name</label>
+	                    <input type="text" th:field="*{majorName}" id="majorName" class="form-control form-control-lg">
+	                </div>
+	                <div class="col-md-4 form-group">
+	                    <label for="fname">Major Degree</label>
+	                    <input type="text" th:field="*{majorDegree}" class="form-control form-control-lg">
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-md-4 form-group">
+	                    <label for="fname">Department Name</label>
+	                    <select th:field="*{departmentId}" class="form-control form-select form-control-lg">
+							<option th:value="NULL" th:text="NULL"></option>
+							<option th:each="department : ${model.departmentList}" th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+						</select>
+					</div>
+	                <div class="col-md-4 form-group">
+	                    <label for="fname">Credits To Graduate</label>
+	                    <input type="text" th:field="*{creditsToGraduate}" class="form-control form-control-lg">
+	                </div>
+	            </div>
+	            
+	             <div class="row">
+	             	<div class="col-md-4 form-group">
+	             		<a th:href="@{/admin/adminhome}" class="btn btn-secondary">Back</a>
+	             		<a th:href="@{/admin/registermajor}" class="btn btn-primary">New Major</a>
+	             		<button type="submit" class="btn btn-info">Search</button>
+	             	</div>
+	             </div>
+				
+				<div th:if="${not #lists.isEmpty(model.majorList)}">
+				<div align="center">
+					<h2>Major List</h2>
+				</div>
+				<br>
+				<table class="table table-hover">	
+					<tr>
+						<th>Major Id</th>
+						<th>Department Name</th>
+						<th>Major Name</th>
+						<th>Major Degree</th>
+						<th>Credits To Graduate</th>
+						<th>Action</th>
+					</tr>
+					<tr th:each="major : ${model.majorList}">
+						<td th:utext="${major.majorId}"></td>
+						<td th:utext="${major.departmentName}"></td>
+						<td th:utext="${major.majorName}"></td>
+						<td th:utext="${major.majorDegree}"></td>
+						<td th:utext="${major.creditsToGraduate}"></td>
+						<td>
+							<button type="button" class="btn btn-info" th:onclick="findMajorRequirement([[${major.majorId}]],[[${major.majorName}]])">Requirement</button>
+							<a th:href="@{/admin/updatemajor/{id}(id=${major.majorId})}" class="btn btn-info">Update</a>
+							<a th:href="@{/admin/deletemajor/{id}(id=${major.majorId})}" class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+					
+				</table>
+				</div>
+			 </form>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+    
+
+  </div>
+  <!-- .site-wrap -->
+
+  <!-- loader -->
+  <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
+
+  <script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.stellar.min.js"></script>
+  <script src="../js/jquery.countdown.min.js"></script>
+  <script src="../js/bootstrap-datepicker.min.js"></script>
+  <script src="../js/jquery.easing.1.3.js"></script>
+  <script src="../js/aos.js"></script>
+  <script src="../js/jquery.fancybox.min.js"></script>
+  <script src="../js/jquery.sticky.js"></script>
+  <script src="../js/jquery.mb.YTPlayer.min.js"></script>
+
+  <script src="../js/main.js"></script>
+
 </body>
+
 </html>

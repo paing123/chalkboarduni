@@ -77,7 +77,7 @@ public class MajorRequirementController {
 			majorRequirement.setCourseId(null);
 			List<MajorRequirement> majorRequirementList = majorRequirementService.findMajorRequirement(majorRequirement);
 			majorRequirement.setMajorRequirementList(majorRequirementList);
-			majorRequirement.setErrorMessage("Duplication Error! Please check CourseId.");
+			majorRequirement.setErrorMessage("Duplication Error! Please check Course.");
 			return "admin/majorrequirementdetail";
 		}
 	}

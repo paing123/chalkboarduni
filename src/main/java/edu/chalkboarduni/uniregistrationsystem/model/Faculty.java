@@ -6,6 +6,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.cache.annotation.EnableCaching;
+
 import edu.chalkboarduni.uniregistrationsystem.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;

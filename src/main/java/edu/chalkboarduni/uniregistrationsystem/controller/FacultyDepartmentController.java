@@ -110,17 +110,14 @@ public class FacultyDepartmentController {
 		
 	}
 	
-	@GetMapping("updatefacultydepartment/{facid}/{did}")
-	public String getExistFacultyDepartment(@PathVariable("facid") Integer facultyId,@PathVariable("did") String departmentId,Model model) {
-		FacultyDepartment existFacultyDepartment = new FacultyDepartment();
+	@PostMapping("updatefacultydepartmentform")
+	public String getExistFacultyDepartment(FacultyDepartment facultyDepartment, Model model) {
 		List<Department> departmentList = departmentService.findDepartment(new Department());
 		List<Faculty> facultyList = facultyService.findFaculty(new Faculty());
-		existFacultyDepartment.setFacultyId(facultyId);
-		existFacultyDepartment.setDepartmentId(departmentId);
-		existFacultyDepartment = facultyDepartmentService.findFacultyDepartment(existFacultyDepartment).get(0);
-		existFacultyDepartment.setDepartmentList(departmentList);
-		existFacultyDepartment.setFacultyList(facultyList);
-		model.addAttribute("model",existFacultyDepartment);
+		facultyDepartment = facultyDepartmentService.findFacultyDepartment(facultyDepartment).get(0);
+		facultyDepartment.setDepartmentList(departmentList);
+		facultyDepartment.setFacultyList(facultyList);
+		model.addAttribute("model",facultyDepartment);
 		return "admin/updatefacultydepartment";
 	}
 	
