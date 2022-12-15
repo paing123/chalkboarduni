@@ -130,6 +130,20 @@ public class CourseSectionController {
 			return "admin/registercoursesection";
 		}
 		
+		if("error".equals(this.checkTimeSlotForSameRoom(courseSection, "register"))) {
+			List<Course> courseList = courseService.findCourse(new Course());
+			List<Faculty> facultyList = facultyService.findFaculty(new Faculty());
+			List<TimeSlot> timeSlotList = timeSlotService.findTimeSlot(new TimeSlot());
+			List<Room> roomList = roomService.findRoom(new Room());
+			courseSection.setCourseList(courseList);
+			courseSection.setFacultyList(facultyList);
+			courseSection.setTimeSlotList(timeSlotList);
+			courseSection.setRoomList(roomList);
+			courseSection.setErrorMessage("Room occupied. Please choose a different room or time slot.");
+			return "admin/registercoursesection";
+		}
+		
+		
 		try {
 			courseSectionService.save(courseSection);
 			return "redirect:/admin/searchcoursesections?successMessage=registered";
@@ -145,8 +159,6 @@ public class CourseSectionController {
 			courseSection.setErrorMessage("Duplication Error! Please check CourseSectionId.");
 			return "admin/registercoursesection";
 		}
-		
-		
 	}
 	
 	@GetMapping("/admin/updatecoursesection/{id}")
@@ -178,6 +190,19 @@ public class CourseSectionController {
 			courseSection.setFacultyList(facultyList);
 			courseSection.setTimeSlotList(timeSlotList);
 			courseSection.setRoomList(roomList);
+			return "admin/updatecoursesection";
+		}
+		
+		if("error".equals(this.checkTimeSlotForSameRoom(courseSection, "update"))) {
+			List<Course> courseList = courseService.findCourse(new Course());
+			List<Faculty> facultyList = facultyService.findFaculty(new Faculty());
+			List<TimeSlot> timeSlotList = timeSlotService.findTimeSlot(new TimeSlot());
+			List<Room> roomList = roomService.findRoom(new Room());
+			courseSection.setCourseList(courseList);
+			courseSection.setFacultyList(facultyList);
+			courseSection.setTimeSlotList(timeSlotList);
+			courseSection.setRoomList(roomList);
+			courseSection.setErrorMessage("Room occupied. Please choose a different room or time slot.");
 			return "admin/updatecoursesection";
 		}
 		
@@ -265,5 +290,49 @@ public class CourseSectionController {
 		courseSection.setRoomList(roomList);
 		courseSection.setDepartmentList(departmentList);
 		return "researcherstaff/coursesections";
+	}
+	
+	private String checkTimeSlotForSameRoom(CourseSection newCourseSection, String checkForm) {
+		
+		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
+		
+		int count = 0;
+		boolean checkSameCoureSectionId = false;
+		
+		for (CourseSection courseSection : courseSectionList) {
+			if(courseSection.getRoomId().equals(newCourseSection.getRoomId()) && courseSection.getTimeSlotId().equals(newCourseSection.getTimeSlotId())){
+				
+				if(courseSection.getCourseSectionId().equals(newCourseSection.getCourseSectionId())) {
+					checkSameCoureSectionId = true;
+				}
+				count++;
+			}
+		}
+		
+		if("register".equals(checkForm)) {
+			//new course section can't be same room with same timeslot
+			if(count == 0) {
+				return "ok";
+			}
+			return "error";
+		}else {
+			//existing course section can be same room with same timeslot for 1 time, coz that already existed in db
+			if(checkSameCoureSectionId) {
+				if(count == 1) { //same itself
+					return "ok";
+				}
+				return "error";
+			}
+			else {
+				if(count == 1) //not same itself
+				{
+					return "error";
+				}
+				else 
+				{
+					return "ok";
+				}
+			}
+		}
 	}
 }

@@ -71,6 +71,9 @@
 			<if test="studentHistory.facultyId!=null">
 				AND cs.FacID = #{studentHistory.facultyId}
 			</if>
+			<if test="studentHistory.courseId!=null">
+				AND cs.CourseID = #{studentHistory.courseId}
+			</if>
 			<if test="studentHistory.courseName!=null">
 				AND cs.CourseName LIKE '%' #{studentHistory.courseName} '%'
 			</if>

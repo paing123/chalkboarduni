@@ -66,6 +66,8 @@ public class UserDto {
 	@NotNull(message = "Password is required")
 	private String password;
 	
+	private Integer otp;
+	
 	private String successMessage;
 	
 	private String errorMessage;

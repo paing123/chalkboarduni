@@ -52,7 +52,7 @@
 				AND cs.AvailableSeats = #{enrollment.availableSeats}
 			</if>
 			<if test="enrollment.semesterYear!=null">
-				AND cs.SemesterYear = #{enrollment.semesterYear}
+				AND cs.SemesterYear LIKE '%' #{enrollment.semesterYear} '%'
 			</if>
 			<if test="enrollment.timeSlotId!=null">
 				AND cs.TimeSlotID = #{enrollment.timeSlotId}

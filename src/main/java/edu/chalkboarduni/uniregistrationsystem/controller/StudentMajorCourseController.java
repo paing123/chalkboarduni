@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.chalkboarduni.uniregistrationsystem.dto.UserDto;
 import edu.chalkboarduni.uniregistrationsystem.model.CourseSection;
+import edu.chalkboarduni.uniregistrationsystem.model.Enrollment;
 import edu.chalkboarduni.uniregistrationsystem.model.MajorRequirement;
 import edu.chalkboarduni.uniregistrationsystem.model.StudentHistory;
 import edu.chalkboarduni.uniregistrationsystem.model.StudentMajor;
+import edu.chalkboarduni.uniregistrationsystem.service.EnrollmentService;
 import edu.chalkboarduni.uniregistrationsystem.service.MajorRequirementService;
 import edu.chalkboarduni.uniregistrationsystem.service.StudentHistoryService;
 import edu.chalkboarduni.uniregistrationsystem.service.StudentMajorService;
@@ -31,6 +33,9 @@ public class StudentMajorCourseController {
 	
 	@Autowired
 	private StudentHistoryService studentHistoryService;
+	
+	@Autowired
+	private EnrollmentService enrollmentService;
 	
 	@ModelAttribute
     public void initModel(MajorRequirement majorRequirement, Model model) {
@@ -59,6 +64,20 @@ public class StudentMajorCourseController {
 		List<StudentHistory> stuHistoryList = studentHistoryService.findStudentHistory(studHistory);
 		
 		for (MajorRequirement majorReq : majorRequirements) {
+			
+			//check enrollment
+			Enrollment enrollment = new Enrollment();
+			enrollment.setStudentId(currentStudent.getUserId());
+			enrollment.setCourseId(majorReq.getCourseId());
+			enrollment.setSemesterYear("Fall2022");
+			List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
+			
+			if(enrollmentList.size() != 0) {
+				majorReq.setStatus("In progress");
+				continue;
+			}
+			
+			
 			for (StudentHistory studentHistory : stuHistoryList) {
 				if(majorReq.getCourseId().equals(studentHistory.getCourseId())) {
 					majorReq.setStatus("Passed");

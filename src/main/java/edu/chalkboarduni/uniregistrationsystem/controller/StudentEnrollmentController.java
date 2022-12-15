@@ -129,7 +129,8 @@ public class StudentEnrollmentController {
 		enrollCourseSection = courseSectionService.findCourseSection(enrollCourseSection).get(0);
 		
 		this.refreshCourseSection(enrollCourseSection);	
-	
+		this.checkTimeWindow(enrollCourseSection.getCourseSectionList());
+		
 		String currentSemesterYear = "Fall2022";
 		
 		//check student hold
@@ -158,12 +159,24 @@ public class StudentEnrollmentController {
 		
 		List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
 		if (enrollmentList.size() > 0) {
-			enrollCourseSection.setErrorMessage("You had already enrolled that course. Try another one.");
+			enrollCourseSection.setErrorMessage("You had already enrolled this course in this semester. Try another one.");
 			this.cleanModel(enrollCourseSection);
 			model.addAttribute("model", enrollCourseSection);
 			return "student/coursesections";
 		}
-
+		
+		//check student history that course is already taken or not
+		StudentHistory studentHistory = new StudentHistory();
+		studentHistory.setStudentId(currentStudent.getUserId());
+		studentHistory.setCourseId(enrollCourseSection.getCourseId());
+		List<StudentHistory> studentHistories = studentHistoryService.findStudentHistory(studentHistory);
+		if(studentHistories.size() > 0) {
+			enrollCourseSection.setErrorMessage("You had already passed that course with minimum required grade.");
+			this.cleanModel(enrollCourseSection);
+			model.addAttribute("model", enrollCourseSection);
+			return "student/coursesections";
+		}
+		
 		//check prerequisities
 		String resultMessage = this.checkPrerequisities(enrollCourseSection,currentStudent);
 		if(!"ok".equals(resultMessage)) {
@@ -189,6 +202,7 @@ public class StudentEnrollmentController {
 		
 		enrollmentService.save(enrollment);
 		this.refreshCourseSection(enrollCourseSection);
+		this.checkTimeWindow(enrollCourseSection.getCourseSectionList());
 		this.cleanModel(enrollCourseSection);
 		enrollCourseSection.setSuccessMessage("You are successfully enrolled.");
 		model.addAttribute("model", enrollCourseSection);
@@ -206,13 +220,13 @@ public class StudentEnrollmentController {
 		StudentHistory stuHistory = new StudentHistory();
 		stuHistory.setStudentId(currentStudent.getUserId());
 		List<StudentHistory> stuHistoryList = studentHistoryService.findStudentHistory(stuHistory);
-		
-		//if(prerequisitiess.size() > 1) {
+					
+		for (Prerequisites prerequisites : prerequisitiess) {
 			
-			for (Prerequisites prerequisites : prerequisitiess) {
-				
-				boolean checkRequiredCourse = false;
-				for (StudentHistory studentHistory : stuHistoryList) {
+			boolean checkRequiredCourse = false;
+			
+			for (StudentHistory studentHistory : stuHistoryList) {
+				if(prerequisites.getRequiredCourseId() != null) {
 					if(prerequisites.getRequiredCourseId().equals(studentHistory.getCourseId())) {
 
 						int studHistGrade = this.generateGradeIntValue(studentHistory.getGrade());
@@ -222,22 +236,21 @@ public class StudentEnrollmentController {
 							checkRequiredCourse = true;
 							break;
 						}
-
 					}
-				}
-				
-				if(prerequisitiess.size() == 1) {
-					String enrolledCourseId = prerequisitiess.get(0).getRequiredCourseId();
-					if(enrolledCourseId == null) {
-						checkRequiredCourse = true;
-					}
-				}
-				
-				if(!checkRequiredCourse) {
-					return "You need to enroll the prerequisite courses first, please check Major Requirement with minimun Grade.";
 				}
 			}
-		//}
+			
+			if(prerequisitiess.size() == 1) {
+				String enrolledCourseId = prerequisitiess.get(0).getRequiredCourseId();
+				if(enrolledCourseId == null) {
+					checkRequiredCourse = true;
+				}
+			}
+			
+			if(!checkRequiredCourse) {
+				return "You need to enroll the prerequisite courses first, please check Major Requirement with minimun Grade.";
+			}
+		}
 		
 		
 		return "ok";	
@@ -303,7 +316,6 @@ public class StudentEnrollmentController {
 	
 	private void refreshCourseSection(CourseSection courseSection) {
 		List<CourseSection> courseSectionList = courseSectionService.findCourseSection(new CourseSection());
-		this.checkTimeWindow(courseSectionList);
 		for (CourseSection courseSec : courseSectionList) {
 			courseSec.setTimeWindow(edu.chalkboarduni.uniregistrationsystem.util.DateTimeFormatter.changeDateFormatForTimeSlot(courseSec.getTimeWindow()));
 		}
