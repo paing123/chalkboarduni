@@ -23,6 +23,8 @@ public class MinorRequirement {
 	
 	private String courseName;
 	
+	private String status;
+	
 	private String successMessage;
 	
 	private String errorMessage;

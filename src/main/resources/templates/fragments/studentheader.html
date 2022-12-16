@@ -41,8 +41,12 @@
 		                <li class="active">
 		                  <a th:href="@{/student/enrollmenthistories}" class="nav-link text-left">Degree Audit</a>
 		                </li>
-		                <li class="active">
-		                  <a th:href="@{/student/majorcourses}" class="nav-link text-left">Major Courses</a>
+		                <li class="has-children">
+		                  <a href="#" class="nav-link text-left">Courses</a>
+		                  <ul class="dropdown">
+		                    <li><a th:href="@{/student/majorcourses}">Major Courses</a></li>
+		                    <li><a th:href="@{/student/minorcourses}">Minor Courses</a></li>
+		                  </ul>
 		                </li>
 		                <li class="active">
 		                  <a th:href="@{/student/studenthistories}" class="nav-link text-left">History</a>

@@ -11,29 +11,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.chalkboarduni.uniregistrationsystem.dto.UserDto;
-import edu.chalkboarduni.uniregistrationsystem.model.CourseSection;
 import edu.chalkboarduni.uniregistrationsystem.model.Enrollment;
-import edu.chalkboarduni.uniregistrationsystem.model.MajorRequirement;
 import edu.chalkboarduni.uniregistrationsystem.model.MinorRequirement;
 import edu.chalkboarduni.uniregistrationsystem.model.StudentHistory;
-import edu.chalkboarduni.uniregistrationsystem.model.StudentMajor;
 import edu.chalkboarduni.uniregistrationsystem.model.StudentMinor;
 import edu.chalkboarduni.uniregistrationsystem.service.EnrollmentService;
-import edu.chalkboarduni.uniregistrationsystem.service.MajorRequirementService;
 import edu.chalkboarduni.uniregistrationsystem.service.MinorRequirementService;
 import edu.chalkboarduni.uniregistrationsystem.service.StudentHistoryService;
-import edu.chalkboarduni.uniregistrationsystem.service.StudentMajorService;
 import edu.chalkboarduni.uniregistrationsystem.service.StudentMinorService;
 
 @Controller
 @RequestMapping("student")
-public class StudentMajorCourseController {
+public class StudentMinorCourseController {
 	
 	@Autowired
-	private StudentMajorService studentMajorService;
+	private StudentMinorService studentMinorService;
 	
 	@Autowired
-	private MajorRequirementService majorRequirementService;
+	private MinorRequirementService minorRequirementService;
 	
 	@Autowired
 	private StudentHistoryService studentHistoryService;
@@ -42,59 +37,59 @@ public class StudentMajorCourseController {
 	private EnrollmentService enrollmentService;
 	
 	@ModelAttribute
-    public void initModel(MajorRequirement majorRequirement, Model model) {
-        model.addAttribute("model", majorRequirement);
+    public void initModel(MinorRequirement minorRequirement, Model model) {
+        model.addAttribute("model", minorRequirement);
     }
 	
-	@RequestMapping(value = {"majorcourses"})
-	public String getStudentMajorCourseList(MajorRequirement majorRequirement, HttpSession session) {
+	@RequestMapping(value = {"minorcourses"})
+	public String getStudentMinorCourseList(MinorRequirement minorRequirement, HttpSession session) {
 		
 		UserDto currentStudent = (UserDto)session.getAttribute("currentUser");
 		
-		//get student major
-		StudentMajor stuMajor = new StudentMajor();
-		stuMajor.setStudentId(currentStudent.getUserId());
-		stuMajor = studentMajorService.findStudentMajor(stuMajor).get(0);
+		//get student minor
+		StudentMinor stuMinor = new StudentMinor();
+		stuMinor.setStudentId(currentStudent.getUserId());
+		stuMinor = studentMinorService.findStudentMinor(stuMinor).get(0);
 		
-		//get required course for major
-		MajorRequirement majRequirement = new MajorRequirement();
-		majRequirement.setMajorId(stuMajor.getMajorId());
-		List<MajorRequirement> majorRequirements = majorRequirementService.findMajorRequirement(majRequirement);
-		majorRequirement.setMajorRequirementList(majorRequirements);
+		//get required course for minor
+		MinorRequirement minRequirement = new MinorRequirement();
+		minRequirement.setMinorId(stuMinor.getMinorId());
+		List<MinorRequirement> minorRequirements = minorRequirementService.findMinorRequirement(minRequirement);
+		minorRequirement.setMinorRequirementList(minorRequirements);
 		
 		//get student history
 		StudentHistory studHistory = new StudentHistory();
 		studHistory.setStudentId(currentStudent.getUserId());
 		List<StudentHistory> stuHistoryList = studentHistoryService.findStudentHistory(studHistory);
 		
-		for (MajorRequirement majorReq : majorRequirements) {
+		for (MinorRequirement minorReq : minorRequirements) {
 			
 			//check enrollment
 			Enrollment enrollment = new Enrollment();
 			enrollment.setStudentId(currentStudent.getUserId());
-			enrollment.setCourseId(majorReq.getCourseId());
+			enrollment.setCourseId(minorReq.getCourseId());
 			enrollment.setSemesterYear("Fall2022");
 			List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
 			
 			if(enrollmentList.size() != 0) {
-				majorReq.setStatus("In progress");
+				minorReq.setStatus("In progress");
 				continue;
 			}
 			
 			
 			for (StudentHistory studentHistory : stuHistoryList) {
-				if(majorReq.getCourseId().equals(studentHistory.getCourseId())) {
-					majorReq.setStatus("Passed");
+				if(minorReq.getCourseId().equals(studentHistory.getCourseId())) {
+					minorReq.setStatus("Passed");
 					break;
 				}
-				majorReq.setStatus("Required");
+				minorReq.setStatus("Required");
 			}
 			
 			if(stuHistoryList.size() == 0) {
-				majorReq.setStatus("Required");
+				minorReq.setStatus("Required");
 			}
 		}
 		
-		return "student/studentmajorcourses";
+		return "student/studentminorcourses";
 	}
 }

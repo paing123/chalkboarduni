@@ -27,8 +27,6 @@
 
   <link rel="stylesheet" href="../css/style.css">
 
-
-
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -44,14 +42,14 @@
       <div class="site-mobile-menu-body"></div>
     </div>
 
-    <div th:replace="fragments/studentheader :: header"></div>
+	<div th:replace="fragments/studentheader :: header"></div>
     
     <div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('../images/bg_1.jpg')">
         <div class="container">
           <div class="row align-items-end justify-content-center text-center">
             <div class="col-lg-7">
-              <h2 class="mb-0">Student Home</h2>
-              <p>All these are student features.</p>
+              <h2 class="mb-0">Student Minor Courses</h2>
+              <p>All these are student minor courses.</p>
             </div>
           </div>
         </div>
@@ -60,20 +58,34 @@
       <div class="container">
         <a th:href="@{/student/studenthome}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <span class="current">Student Home</span>
+        <span class="current">Student Minor Courses</span>
       </div>
     </div>
     <div style="padding: 2.5em;">
         <div class="container">
-        	 <div class="list-group">
-			  <a th:href="@{/student/coursesections}" class="list-group-item list-group-item-action">Master Schedule</a>
-			  <a th:href="@{/student/enrollmenthistories}" class="list-group-item list-group-item-action">Degree Audit</a>
-			  <a th:href="@{/student/majorcourses}" class="list-group-item list-group-item-action">Major Courses</a>
-			  <a th:href="@{/student/minorcourses}" class="list-group-item list-group-item-action">Minor Courses</a>
-			  <a th:href="@{/student/studenthistories}" class="list-group-item list-group-item-action">History</a>
-			  <a th:href="@{/student/advisings}" class="list-group-item list-group-item-action">Appointments</a>
-			  <a th:href="@{/student/updatestudent}" class="list-group-item list-group-item-action">Profile</a>
-			</div>
+        	 <form id="frmStudentMinorCourse" th:object="${model}">
+				<div align="center">
+					<h2>Student Minor Courses</h2>
+				</div>
+				<br>
+				<table class="table table-hover">
+					<tr>
+						<th>Minor Id</th>
+						<th>Minor Name</th>
+						<th>Course Id</th>
+						<th>Course Name</th>
+						<th>Status</th>
+						
+					</tr>
+					<tr th:each="minorReq : ${model.minorRequirementList}">
+						<td th:utext="${minorReq.minorId}"></td>
+						<td th:utext="${minorReq.minorName}"></td>
+						<td th:utext="${minorReq.courseId}"></td>
+						<td th:utext="${minorReq.courseName}"></td>
+						<td th:utext="${minorReq.status}"></td>			
+					</tr>
+				</table>
+			 </form>
         </div>
     </div>
     <div th:replace="fragments/footer :: footer"></div>
@@ -99,9 +111,6 @@
   <script src="../js/jquery.fancybox.min.js"></script>
   <script src="../js/jquery.sticky.js"></script>
   <script src="../js/jquery.mb.YTPlayer.min.js"></script>
-
-
-
 
   <script src="../js/main.js"></script>
 
