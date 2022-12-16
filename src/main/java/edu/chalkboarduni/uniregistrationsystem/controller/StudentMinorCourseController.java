@@ -49,46 +49,50 @@ public class StudentMinorCourseController {
 		//get student minor
 		StudentMinor stuMinor = new StudentMinor();
 		stuMinor.setStudentId(currentStudent.getUserId());
-		stuMinor = studentMinorService.findStudentMinor(stuMinor).get(0);
 		
-		//get required course for minor
-		MinorRequirement minRequirement = new MinorRequirement();
-		minRequirement.setMinorId(stuMinor.getMinorId());
-		List<MinorRequirement> minorRequirements = minorRequirementService.findMinorRequirement(minRequirement);
-		minorRequirement.setMinorRequirementList(minorRequirements);
-		
-		//get student history
-		StudentHistory studHistory = new StudentHistory();
-		studHistory.setStudentId(currentStudent.getUserId());
-		List<StudentHistory> stuHistoryList = studentHistoryService.findStudentHistory(studHistory);
-		
-		for (MinorRequirement minorReq : minorRequirements) {
+		if(studentMinorService.findStudentMinor(stuMinor).size() > 0) {
+			stuMinor = studentMinorService.findStudentMinor(stuMinor).get(0);
 			
-			//check enrollment
-			Enrollment enrollment = new Enrollment();
-			enrollment.setStudentId(currentStudent.getUserId());
-			enrollment.setCourseId(minorReq.getCourseId());
-			enrollment.setSemesterYear("Fall2022");
-			List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
+			//get required course for minor
+			MinorRequirement minRequirement = new MinorRequirement();
+			minRequirement.setMinorId(stuMinor.getMinorId());
+			List<MinorRequirement> minorRequirements = minorRequirementService.findMinorRequirement(minRequirement);
+			minorRequirement.setMinorRequirementList(minorRequirements);
 			
-			if(enrollmentList.size() != 0) {
-				minorReq.setStatus("In progress");
-				continue;
-			}
+			//get student history
+			StudentHistory studHistory = new StudentHistory();
+			studHistory.setStudentId(currentStudent.getUserId());
+			List<StudentHistory> stuHistoryList = studentHistoryService.findStudentHistory(studHistory);
 			
-			
-			for (StudentHistory studentHistory : stuHistoryList) {
-				if(minorReq.getCourseId().equals(studentHistory.getCourseId())) {
-					minorReq.setStatus("Passed");
-					break;
+			for (MinorRequirement minorReq : minorRequirements) {
+				
+				//check enrollment
+				Enrollment enrollment = new Enrollment();
+				enrollment.setStudentId(currentStudent.getUserId());
+				enrollment.setCourseId(minorReq.getCourseId());
+				enrollment.setSemesterYear("Fall2022");
+				List<Enrollment> enrollmentList = enrollmentService.findEnrollment(enrollment);
+				
+				if(enrollmentList.size() != 0) {
+					minorReq.setStatus("In progress");
+					continue;
 				}
-				minorReq.setStatus("Required");
-			}
-			
-			if(stuHistoryList.size() == 0) {
-				minorReq.setStatus("Required");
+				
+				
+				for (StudentHistory studentHistory : stuHistoryList) {
+					if(minorReq.getCourseId().equals(studentHistory.getCourseId())) {
+						minorReq.setStatus("Passed");
+						break;
+					}
+					minorReq.setStatus("Required");
+				}
+				
+				if(stuHistoryList.size() == 0) {
+					minorReq.setStatus("Required");
+				}
 			}
 		}
+		
 		
 		return "student/studentminorcourses";
 	}
